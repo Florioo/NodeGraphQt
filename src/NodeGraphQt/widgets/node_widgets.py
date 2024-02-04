@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from Qt import QtCore, QtWidgets
 
-from NodeGraphQt.constants import ViewerEnum, Z_VAL_NODE_WIDGET
+from NodeGraphQt.constants import ViewerEnum, Z_VAL_NODE_WIDGET,BaseColors
 from NodeGraphQt.errors import NodeWidgetError
 
 
@@ -19,8 +19,7 @@ class _NodeGroupBox(QtWidgets.QGroupBox):
         super(_NodeGroupBox, self).setTitle(text)
 
     def setTitleAlign(self, align='center'):
-        text_color = tuple(map(lambda i, j: i - j, (255, 255, 255),
-                               ViewerEnum.BACKGROUND_COLOR.value))
+        text_color = BaseColors.TEXT_COLOR
         style_dict = {
             'QGroupBox': {
                 'background-color': 'rgba(0, 0, 0, 0)',
@@ -329,8 +328,7 @@ class NodeLineEdit(NodeBaseWidget):
     def __init__(self, parent=None, name='', label='', text='', placeholder_text=''):
         super(NodeLineEdit, self).__init__(parent, name, label)
         bg_color = ViewerEnum.BACKGROUND_COLOR.value
-        text_color = tuple(map(lambda i, j: i - j, (255, 255, 255),
-                               bg_color))
+        text_color = BaseColors.TEXT_COLOR
         text_sel_color = text_color
         style_dict = {
             'QLineEdit': {
@@ -400,8 +398,7 @@ class NodeCheckBox(NodeBaseWidget):
     def __init__(self, parent=None, name='', label='', text='', state=False):
         super(NodeCheckBox, self).__init__(parent, name, label)
         _cbox = QtWidgets.QCheckBox(text)
-        text_color = tuple(map(lambda i, j: i - j, (255, 255, 255),
-                               ViewerEnum.BACKGROUND_COLOR.value))
+        text_color = BaseColors.TEXT_COLOR
         style_dict = {
             'QCheckBox': {
                 'color': 'rgba({0},{1},{2},150)'.format(*text_color),

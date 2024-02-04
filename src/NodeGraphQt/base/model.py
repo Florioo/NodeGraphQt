@@ -9,7 +9,7 @@ from NodeGraphQt.constants import (
 )
 from NodeGraphQt.errors import NodePropertyError
 
-
+from NodeGraphQt.constants import BaseColors
 class PortModel(object):
     """
     Data dump for a port object.
@@ -62,9 +62,9 @@ class NodeModel(object):
         self.id = hex(id(self))
         self.icon = None
         self.name = 'node'
-        self.color = (13, 18, 23, 255)
-        self.border_color = (74, 84, 85, 255)
-        self.text_color = (255, 255, 255, 180)
+        self.color = BaseColors.FG_COLOR        
+        self.border_color =BaseColors.BORDER_COLOR 
+        self.text_color = BaseColors.TEXT_COLOR    
         self.disabled = False
         self.selected = False
         self.visible = True

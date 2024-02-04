@@ -38,7 +38,11 @@ Z_VAL_NODE_WIDGET = 3
 ITEM_CACHE_MODE = QtWidgets.QGraphicsItem.DeviceCoordinateCache
 
 # =================================== GLOBAL ===================================
-
+class BaseColors:
+    BACKGROUND_COLOR = (255,255,255)
+    FG_COLOR = (26*2, 36*2, 46*2, 255)
+    BORDER_COLOR = (74, 84, 85, 255)
+    TEXT_COLOR = (255, 255, 255, 220)
 
 class VersionEnum(Enum):
     """
@@ -74,8 +78,8 @@ class ViewerEnum(Enum):
     Node graph viewer styling layout:
     :py:mod:`NodeGraphQt.constants.ViewerEnum`
     """
-    #: default background color for the node graph.
-    BACKGROUND_COLOR = (35, 35, 35)
+    #: light background color for the node graph.
+    BACKGROUND_COLOR = BaseColors.BACKGROUND_COLOR
     #: style node graph background with no grid or dots.
     GRID_DISPLAY_NONE = 0
     #: style node graph background with dots.
@@ -84,8 +88,9 @@ class ViewerEnum(Enum):
     GRID_DISPLAY_LINES = 2
     #: grid size when styled with grid lines.
     GRID_SIZE = 50
-    #: grid line color.
-    GRID_COLOR = (45, 45, 45)
+    #: grid line color for light theme.
+    GRID_COLOR = (230, 230, 230)  # Slightly darker than the background
+
 
 
 class ViewerNavEnum(Enum):
@@ -99,7 +104,6 @@ class ViewerNavEnum(Enum):
     ITEM_COLOR = (35, 35, 35)
 
 # ==================================== NODE ====================================
-
 
 class NodeEnum(Enum):
     """
@@ -115,7 +119,7 @@ class NodeEnum(Enum):
     #: default node overlay color when selected.
     SELECTED_COLOR = (255, 255, 255, 30)
     #: default node border color when selected.
-    SELECTED_BORDER_COLOR = (254, 207, 42, 255)
+    SELECTED_BORDER_COLOR = (254, 0, 0, 255)
 
 # ==================================== PORT ====================================
 
@@ -127,18 +131,18 @@ class PortEnum(Enum):
     """
     #: default port size.
     SIZE = 22.0
-    #: default port color. (r, g, b, a)
-    COLOR = (49, 115, 100, 255)
-    #: default port border color.
-    BORDER_COLOR = (29, 202, 151, 255)
+    #: default port color for light theme. (r, g, b, a)
+    COLOR = (200, 200, 200, 255)  # Light color
+    #: default port border color for light theme.
+    BORDER_COLOR = (150, 150, 150, 255)  # Slightly darker border
     #: port color when selected.
-    ACTIVE_COLOR = (14, 45, 59, 255)
+    ACTIVE_COLOR = (100, 100, 100, 255)  # Darker when active
     #: port border color when selected.
-    ACTIVE_BORDER_COLOR = (107, 166, 193, 255)
+    ACTIVE_BORDER_COLOR = (50, 50, 50, 255)  # Even darker for active border
     #: port color on mouse over.
-    HOVER_COLOR = (17, 43, 82, 255)
+    HOVER_COLOR = (150, 150, 150, 255)  # Slightly darker on hover
     #: port border color on mouse over.
-    HOVER_BORDER_COLOR = (136, 255, 35, 255)
+    HOVER_BORDER_COLOR = (100, 100, 100, 255)  # Darker border on hover
     #: threshold for selecting a port.
     CLICK_FALLOFF = 15.0
 
@@ -155,7 +159,6 @@ class PortTypeEnum(Enum):
 
 # ==================================== PIPE ====================================
 
-
 class PipeEnum(Enum):
     """
     Pipe styling layout:
@@ -163,14 +166,14 @@ class PipeEnum(Enum):
     """
     #: default width.
     WIDTH = 1.2
-    #: default color.
-    COLOR = (175, 95, 30, 255)
-    #: pipe color to a node when it's disabled.
-    DISABLED_COLOR = (200, 60, 60, 255)
-    #: pipe color when selected or mouse over.
-    ACTIVE_COLOR = (70, 255, 220, 255)
-    #: pipe color to a node when it's selected.
-    HIGHLIGHT_COLOR = (232, 184, 13, 255)
+    #: default color for light theme.
+    COLOR = (120, 120, 120, 255)  # Medium gray for visibility
+    #: pipe color to a node when it's disabled in light theme.
+    DISABLED_COLOR = (180, 180, 180, 255)  # Lighter gray for disabled state
+    #: pipe color when selected or mouse over in light theme.
+    ACTIVE_COLOR = (0, 120, 215, 255)  # Blue for active, good contrast on light bg
+    #: pipe color to a node when it's selected in light theme.
+    HIGHLIGHT_COLOR = (255, 165, 0, 255)  # Orange for highlighting, visible on light bg
     #: draw connection as a line.
     DRAW_TYPE_DEFAULT = 0
     #: draw connection as dashed lines.
