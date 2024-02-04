@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtCore, QtWidgets
+from qtpy import QtCore, QtWidgets
 
 from NodeGraphQt.constants import ViewerEnum, Z_VAL_NODE_WIDGET,BaseColors
 from NodeGraphQt.errors import NodeWidgetError
@@ -142,7 +142,7 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
 
     def get_icon(self, name):
         """
-        Returns the default icon from the Qt framework.
+        Returns the default icon from the qtpy framework.
 
         Returns:
             str: icon name.

@@ -3,7 +3,8 @@
 import math
 from distutils.version import LooseVersion
 
-from Qt import QtGui, QtCore, QtWidgets
+from qtpy import QtGui, QtCore, QtWidgets
+from qtpy.QtCore import Qt
 
 from NodeGraphQt.base.menu import BaseMenu
 from NodeGraphQt.constants import (
@@ -63,11 +64,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
         super(NodeViewer, self).__init__(parent)
 
         self.setScene(NodeScene(self))
-        self.setRenderHint(QtGui.QPainter.Antialiasing, True)
-        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setViewportUpdateMode(QtWidgets.QGraphicsView.FullViewportUpdate)
-        self.setCacheMode(QtWidgets.QGraphicsView.CacheBackground)
+        self.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, True)
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setViewportUpdateMode(QtWidgets.QGraphicsView.ViewportUpdateMode.FullViewportUpdate)
+        self.setCacheMode(QtWidgets.QGraphicsView.CacheModeFlag.CacheBackground)
         self.setOptimizationFlag(
             QtWidgets.QGraphicsView.DontAdjustForAntialiasing)
 
@@ -102,7 +103,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         )))
         text_color.setAlpha(50)
         self._cursor_text = QtWidgets.QGraphicsTextItem()
-        self._cursor_text.setFlag(self._cursor_text.ItemIsSelectable, False)
+        self._cursor_text.setFlag(self._cursor_text.GraphicsItemFlag.ItemIsSelectable, False)
         self._cursor_text.setDefaultTextColor(text_color)
         self._cursor_text.setZValue(Z_VAL_PIPE - 1)
         font = self._cursor_text.font()
@@ -616,7 +617,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 path.addRect(map_rect)
                 self._rubber_band.setGeometry(rect)
                 self.scene().setSelectionArea(
-                    path, QtCore.Qt.IntersectsItemShape
+                    path, 
+                    selectionOperation=QtCore.Qt.ItemSelectionOperation.ReplaceSelection,
+                    mode=QtCore.Qt.ItemSelectionMode.IntersectsItemShape,
+                    deviceTransform=QtGui.QTransform()
                 )
                 self.scene().update(map_rect)
 
@@ -1638,9 +1642,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
         """
         # use QOpenGLWidget instead of the deprecated QGLWidget to avoid
         # problems with Wayland.
-        import Qt
-        if Qt.IsPySide2:
-            from PySide2.QtWidgets import QOpenGLWidget
-        elif Qt.IsPyQt5:
-            from PyQt5.QtWidgets import QOpenGLWidget
+        from qtpy.QtWidgets import QOpenGLWidget
+
         self.setViewport(QOpenGLWidget())

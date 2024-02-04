@@ -6,7 +6,7 @@ authors = ["Johnny Chan"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-qt-py = "^1.3.10"
+qtpy = "^2.4.1"
 
 
 [build-system]

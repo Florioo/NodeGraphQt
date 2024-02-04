@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from collections import defaultdict
 
-from Qt import QtWidgets, QtCore, QtGui, QtCompat
+from qtpy import QtWidgets, QtCore, QtGui
 
 from .node_property_factory import NodePropertyWidgetFactory
 from .prop_widgets_base import PropLineEdit
@@ -17,7 +17,7 @@ class _PropertiesDelegate(QtWidgets.QStyledItemDelegate):
             index (QtCore.QModelIndex):
         """
         painter.save()
-        painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
+        painter.setRenderHint(QtGui.painter.RenderHint.Antialiasing, False)
         painter.setPen(QtCore.Qt.NoPen)
 
         # draw background.
@@ -54,12 +54,12 @@ class _PropertiesList(QtWidgets.QTableWidget):
         self.verticalHeader().hide()
         self.horizontalHeader().hide()
 
-        QtCompat.QHeaderView.setSectionResizeMode(
-            self.verticalHeader(), QtWidgets.QHeaderView.ResizeToContents
-        )
-        QtCompat.QHeaderView.setSectionResizeMode(
-            self.horizontalHeader(), 0, QtWidgets.QHeaderView.Stretch
-        )
+        # QtCompat.QHeaderView.setSectionResizeMode(
+        #     self.verticalHeader(), QtWidgets.QHeaderView.ResizeToContents
+        # )
+        # QtCompat.QHeaderView.setSectionResizeMode(
+        #     self.horizontalHeader(), 0, QtWidgets.QHeaderView.Stretch
+        # )
         self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
 
     def wheelEvent(self, event):
