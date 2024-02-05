@@ -5,12 +5,15 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
     """
     NodeTextItem class used to display and edit the name of a NodeItem.
     """
+    _locked:bool = False
+    _text: str = ""
+
+    text_update = QtCore.Signal(str)
 
     def __init__(self, text, parent=None):
         super(NodeTextItem, self).__init__(text, parent)
-        self._locked = False
         self.set_locked(False)
-        self.set_editable(False)
+        self.set_edit_mode(False)
 
     def mouseDoubleClickEvent(self, event):
         """
@@ -20,8 +23,9 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
             event (QtWidgets.QGraphicsSceneMouseEvent): mouse event.
         """
         if not self._locked:
-            if event.button() == QtCore.Qt.LeftButton:
-                self.set_editable(True)
+            if event.button() == QtCore.Qt.MouseButton.LeftButton:
+                self.set_edit_mode(True)
+                
                 event.ignore()
                 return
         super(NodeTextItem, self).mouseDoubleClickEvent(event)
@@ -33,13 +37,13 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
         Args:
             event (QtGui.QKeyEvent): key event.
         """
-        if event.key() == QtCore.Qt.Key_Return:
+        if event.key() == QtCore.Qt.Key.Key_Return:
             current_text = self.toPlainText()
-            self.set_node_name(current_text)
-            self.set_editable(False)
-        elif event.key() == QtCore.Qt.Key_Escape:
-            self.setPlainText(self.node.name)
-            self.set_editable(False)
+            self.text = current_text
+            self.set_edit_mode(False)
+        elif event.key() == QtCore.Qt.Key.Key_Escape:
+            self.setPlainText(self.text)
+            self.set_edit_mode(False)
         super(NodeTextItem, self).keyPressEvent(event)
 
     def focusOutEvent(self, event):
@@ -50,11 +54,11 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
             event (QtGui.QFocusEvent):
         """
         current_text = self.toPlainText()
-        self.set_node_name(current_text)
-        self.set_editable(False)
+        self.text = current_text
+        self.set_edit_mode(False)
         super(NodeTextItem, self).focusOutEvent(event)
 
-    def set_editable(self, value=False):
+    def set_edit_mode(self, value=False):
         """
         Set the edit mode for the text item.
 
@@ -63,29 +67,16 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
         """
         if self._locked:
             return
+        
         if value:
             self.setTextInteractionFlags(
-                QtCore.Qt.TextEditable | QtCore.Qt.TextSelectableByMouse | QtCore.Qt.TextSelectableByKeyboard
+                QtCore.Qt.TextInteractionFlag.TextEditable | QtCore.Qt.TextInteractionFlag.TextSelectableByMouse | QtCore.Qt.TextInteractionFlag.TextSelectableByKeyboard
             )
         else:
-            self.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
+            self.setTextInteractionFlags(QtCore.Qt.TextInteractionFlag.NoTextInteraction)
             cursor = self.textCursor()
             cursor.clearSelection()
             self.setTextCursor(cursor)
-
-    def set_node_name(self, name):
-        """
-        Updates the node name through the node "NodeViewer().node_name_changed"
-        signal which then updates the node name through the BaseNode object this
-        will register it as an undo command.
-
-        Args:
-            name (str): new node name.
-        """
-        name = name.strip()
-        if name != self.node.name:
-            viewer = self.node.viewer()
-            viewer.node_name_changed.emit(self.node.id, name)
 
     def set_locked(self, state=False):
         """
@@ -96,20 +87,45 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
         """
         self._locked = state
         if self._locked:
-            self.setFlag(QtWidgets.QGraphicsItem.ItemIsFocusable, False)
-            self.setCursor(QtCore.Qt.ArrowCursor)
+            self.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsFocusable, False)
+            self.setCursor(QtCore.Qt.CursorShape.ArrowCursor)
             self.setToolTip("")
         else:
-            self.setFlag(QtWidgets.QGraphicsItem.ItemIsFocusable, True)
+            self.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsFocusable, True)
             self.setToolTip("double-click to edit node name.")
-            self.setCursor(QtCore.Qt.IBeamCursor)
+            self.setCursor(QtCore.Qt.CursorShape.IBeamCursor)
 
     @property
-    def node(self):
-        """
-        Get the parent node item.
+    def text(self):
+        return self._text
+    
+    @text.setter
+    def text(self, value):
+        self._text = value
+        self.setPlainText(value)
+        self.text_update.emit(value)
 
-        Returns:
-            NodeItem: parent node qgraphics item.
-        """
-        return self.parentItem()
+    # def set_node_name(self, name):
+    #     """
+    #     Updates the node name through the node "NodeViewer().node_name_changed"
+    #     signal which then updates the node name through the BaseNode object this
+    #     will register it as an undo command.
+
+    #     Args:
+    #         name (str): new node name.
+    #     """
+    #     name = name.strip()
+    #     if name != self.node.name:
+    #         viewer = self.node.viewer()
+    #         viewer.node_name_changed.emit(self.node.id, name)
+
+
+    # @property
+    # def node(self):
+    #     """
+    #     Get the parent node item.
+
+    #     Returns:
+    #         NodeItem: parent node qgraphics item.
+    #     """
+    #     return self.parentItem()

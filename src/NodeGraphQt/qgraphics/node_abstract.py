@@ -226,8 +226,7 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         Returns:
             NodeGraphQt.widgets.viewer.NodeViewer: viewer object.
         """
-        if self.scene():
-            return self.scene().viewer()
+        return self.scene().viewer
 
     def delete(self):
         """

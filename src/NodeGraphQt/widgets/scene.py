@@ -5,6 +5,13 @@ from NodeGraphQt.constants import ViewerEnum
 
 
 class NodeScene(QtWidgets.QGraphicsScene):
+    """ Node scene class.
+        This draws the background grid and handles mouse events.
+
+
+    Args:
+        QtWidgets (_type_): _description_
+    """
     def __init__(self, parent=None):
         super(NodeScene, self).__init__(parent)
         self._grid_mode = ViewerEnum.GRID_DISPLAY_LINES.value
@@ -93,7 +100,8 @@ class NodeScene(QtWidgets.QGraphicsScene):
             self._draw_dots(painter, rect, pen, ViewerEnum.GRID_SIZE.value)
 
         elif self._grid_mode is ViewerEnum.GRID_DISPLAY_LINES.value:
-            zoom = self.viewer().get_zoom()
+            # zoom = self.viewer().get_zoom()
+            zoom = 1
             if zoom > -0.5:
                 pen = QtGui.QPen(QtGui.QColor(*self.grid_color), 0.65)
                 self._draw_grid(painter, rect, pen, ViewerEnum.GRID_SIZE.value)
@@ -106,31 +114,31 @@ class NodeScene(QtWidgets.QGraphicsScene):
 
         painter.restore()
 
-    def mousePressEvent(self, event):
-        selected_nodes = self.viewer().selected_nodes()
-        if self.viewer():
-            self.viewer().sceneMousePressEvent(event)
-        super(NodeScene, self).mousePressEvent(event)
-        keep_selection = any(
-            [
-                event.button() == QtCore.Qt.MiddleButton,
-                event.button() == QtCore.Qt.RightButton,
-                event.modifiers() == QtCore.Qt.AltModifier,
-            ]
-        )
-        if keep_selection:
-            for node in selected_nodes:
-                node.setSelected(True)
+    # def mousePressEvent(self, event):
+    #     selected_nodes = self.viewer().selected_nodes()
+    #     if self.viewer():
+    #         self.viewer().sceneMousePressEvent(event)
+    #     super(NodeScene, self).mousePressEvent(event)
+    #     keep_selection = any(
+    #         [
+    #             event.button() == QtCore.Qt.MiddleButton,
+    #             event.button() == QtCore.Qt.RightButton,
+    #             event.modifiers() == QtCore.Qt.AltModifier,
+    #         ]
+    #     )
+    #     if keep_selection:
+    #         for node in selected_nodes:
+    #             node.setSelected(True)
 
-    def mouseMoveEvent(self, event):
-        if self.viewer():
-            self.viewer().sceneMouseMoveEvent(event)
-        super(NodeScene, self).mouseMoveEvent(event)
+    # def mouseMoveEvent(self, event):
+    #     # if self.viewer():
+    #         # self.viewer().sceneMouseMoveEvent(event)
+    #     super(NodeScene, self).mouseMoveEvent(event)
 
-    def mouseReleaseEvent(self, event):
-        if self.viewer():
-            self.viewer().sceneMouseReleaseEvent(event)
-        super(NodeScene, self).mouseReleaseEvent(event)
+    # def mouseReleaseEvent(self, event):
+    #     # if self.viewer():
+    #         # self.viewer().sceneMouseReleaseEvent(event)
+    #     super(NodeScene, self).mouseReleaseEvent(event)
 
     def viewer(self):
         return self.views()[0] if self.views() else None
