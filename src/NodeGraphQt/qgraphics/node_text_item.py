@@ -14,7 +14,7 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
         super(NodeTextItem, self).__init__(text, parent)
         self.set_locked(False)
         self.set_edit_mode(False)
-
+        
     def mouseDoubleClickEvent(self, event):
         """
         Re-implemented to jump into edit mode when user clicks on node text.
@@ -94,6 +94,12 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
             self.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsFocusable, True)
             self.setToolTip("double-click to edit node name.")
             self.setCursor(QtCore.Qt.CursorShape.IBeamCursor)
+
+    def update_alignment(self,parent_rect):
+        h_offset, v_offset = (0, 0)
+        text_rect = self.boundingRect()
+        x = parent_rect.center().x() - (text_rect.width() / 2)
+        self.setPos(x + h_offset, parent_rect.y() + v_offset)
 
     @property
     def text(self):

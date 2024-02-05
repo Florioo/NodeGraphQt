@@ -2,13 +2,48 @@ import sys
 from enum import auto
 from typing import List
 
+from NodeGraphQt.qgraphics.node_base import NodeItem
+
 # Import Qt
 from qtpy import QtCore, QtGui, QtWidgets
 from qtpy.QtCore import Signal
 from qtpy.QtWidgets import QWidget
 from scene import NodeScene
 from viewer import PanZoomGraphicsView
-from NodeGraphQt.qgraphics.node_base import NodeItem
+from pydantic import BaseModel
+from enum import Enum
+
+class PortRoleEnum(Enum):
+    INPUT = "Input"
+    OUTPUT = "Output"
+
+
+class PortDefinition(NodeItem):
+
+    class PortConfig:
+        name: str  # Display name of the port
+        type: str  # Only nodews with same type can be connected
+        role: PortRoleEnum
+        is_locked: bool
+        
+
+    def __init__(self):
+        # super(PortDefinition, self).__init__(name, parent)
+        # self._icon_item.setVisible(False)
+        # self._text_item.set_locked(True)
+        # self._x_item.text = "Port Locked"
+
+
+class TestNode(NodeItem):
+    class Ports(BaseModel):
+        input_port: PortDefinition
+
+    def __init__(self, name: str, parent: QtWidgets.QGraphicsItem = None):
+        super(TestNode, self).__init__(name, parent)
+        self._icon_item.setVisible(False)
+        self._text_item.set_locked(True)
+        self.input_node(PortDefinition())
+
 
 class Viewer(QtWidgets.QWidget):
     def __init__(self, parent):
@@ -46,7 +81,6 @@ class Viewer(QtWidgets.QWidget):
         self.node1.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsMovable)
         self.node1.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsSelectable)
 
-
         self.scene.addItem(self.node1)
 
         self.abstract_node = NodeItem("node", None)
@@ -54,12 +88,22 @@ class Viewer(QtWidgets.QWidget):
 
         self.abstract_nodeq = NodeItem("noqde", None)
         self.scene.addItem(self.abstract_nodeq)
-        
-        NodeItem.__base_color = QtGui.QColor(0,0,255,255)
+        self.abstract_nodeq.add_input("input1")
+        self.abstract_nodeq.add_input("input2")
+        self.abstract_nodeq.add_input("input3")
+        self.abstract_nodeq.add_input("input4")
+
+        self.abstract_nodeq.add_output("output1")
+        self.abstract_nodeq.add_output("output2")
+        self.abstract_nodeq.add_output("output3")
+        self.abstract_nodeq.add_output("output4")
+
+        NodeItem.__base_color = QtGui.QColor(0, 0, 255, 255)
 
         self.abstract_nodeqq = NodeItem("Blue Node", None)
-        self.abstract_nodeqq.__base_color = QtGui.QColor(0,0,255,255)
+        self.abstract_nodeqq.__base_color = QtGui.QColor(0, 0, 255, 255)
         self.scene.addItem(self.abstract_nodeqq)
+        self.abstract_nodeqq.draw_node()
 
         # self.setAcceptDrops(True)
         # self.resize(850, 800)
