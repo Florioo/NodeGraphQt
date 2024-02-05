@@ -17,8 +17,8 @@ class _PropertiesDelegate(QtWidgets.QStyledItemDelegate):
             index (QtCore.QModelIndex):
         """
         painter.save()
-        painter.setRenderHint(QtGui.painter.RenderHint.Antialiasing, False)
-        painter.setPen(QtCore.Qt.NoPen)
+        painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, False)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
 
         # draw background.
         bg_clr = option.palette.base().color()
@@ -27,14 +27,14 @@ class _PropertiesDelegate(QtWidgets.QStyledItemDelegate):
 
         # draw border.
         border_width = 1
-        if option.state & QtWidgets.QStyle.State_Selected:
+        if option.state & QtWidgets.QStyle.StateFlag.State_Selected:
             bdr_clr = option.palette.highlight().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1.5))
         else:
             bdr_clr = option.palette.alternateBase().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1))
 
-        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
         painter.drawRect(QtCore.QRect(
             option.rect.x() + border_width,
             option.rect.y() + border_width,
@@ -60,7 +60,7 @@ class _PropertiesList(QtWidgets.QTableWidget):
         # QtCompat.QHeaderView.setSectionResizeMode(
         #     self.horizontalHeader(), 0, QtWidgets.QHeaderView.Stretch
         # )
-        self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollMode.ScrollPerPixel)
 
     def wheelEvent(self, event):
         """
@@ -86,7 +86,7 @@ class _PropertiesContainer(QtWidgets.QWidget):
         self.__layout.setSpacing(6)
 
         layout = QtWidgets.QVBoxLayout(self)
-        layout.setAlignment(QtCore.Qt.AlignTop)
+        layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         layout.addLayout(self.__layout)
 
         self.__property_widgets = {}
@@ -120,9 +120,9 @@ class _PropertiesContainer(QtWidgets.QWidget):
         if row > 0:
             row += 1
 
-        label_flags = QtCore.Qt.AlignCenter | QtCore.Qt.AlignRight
+        label_flags = QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignRight
         if widget.__class__.__name__ == 'PropTextEdit':
-            label_flags = label_flags | QtCore.Qt.AlignTop
+            label_flags = label_flags | QtCore.Qt.AlignmentFlag.AlignTop
 
         self.__layout.addWidget(label_widget, row, 0, label_flags)
         self.__layout.addWidget(widget, row, 1)
@@ -219,7 +219,7 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
         tree_widget.setHeaderHidden(False)
         tree_widget.header().setStretchLastSection(False)
         QtCompat.QHeaderView.setSectionResizeMode(
-            tree_widget.header(), 2, QtWidgets.QHeaderView.Stretch
+            tree_widget.header(), 2, QtWidgets.QHeaderView.ResizeMode.Stretch
         )
 
         group_box.layout().addWidget(tree_widget)
@@ -235,7 +235,7 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
             port (NodeGraphQt.Port): port object.
         """
         item = QtWidgets.QTreeWidgetItem(tree)
-        item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
+        item.setFlags(item.flags() & ~QtCore.Qt.ItemFlag.ItemIsSelectable)
         item.setText(1, port.name())
         item.setToolTip(0, 'Lock Port')
         item.setToolTip(1, 'Port Name')

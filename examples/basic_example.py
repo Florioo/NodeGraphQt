@@ -20,8 +20,6 @@ if __name__ == '__main__':
     # handle SIGINT to make the app terminate on CTRL+C
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
-
     app = QtWidgets.QApplication([])
 
     # create graph controller.
@@ -113,7 +111,7 @@ if __name__ == '__main__':
 
     # create a node properties bin widget.
     properties_bin = PropertiesBinWidget(node_graph=graph)
-    properties_bin.setWindowFlags(QtCore.Qt.Tool)
+    properties_bin.setWindowFlags(QtCore.Qt.WindowType.Tool)
 
     # example show the node properties bin widget when a node is double-clicked.
     def display_properties_bin(node):
