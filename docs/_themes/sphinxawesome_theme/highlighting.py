@@ -66,9 +66,7 @@ TokenType = Union[_TokenType, int]  # For Python 3.8
 TokenStream = Generator[Tuple[TokenType, str], None, None]
 
 
-def _replace_placeholders(
-    ttype: _TokenType, value: str, regex: Pattern[str]
-) -> TokenStream:
+def _replace_placeholders(ttype: _TokenType, value: str, regex: Pattern[str]) -> TokenStream:
     """Replace every occurence of ``regex`` with ``Generic.Emph`` token."""
     last = 0
     for match in regex.finditer(value):
@@ -103,13 +101,9 @@ class AwesomePlaceholders(Filter):  # type: ignore[misc]
         """Create an instance of the ``AwesomePlaceholders`` filter."""
         Filter.__init__(self, **options)
         placeholders = get_list_opt(options, "hl_text", [])
-        self.placeholders_re = re.compile(
-            r"|".join([re.escape(x) for x in placeholders if x])
-        )
+        self.placeholders_re = re.compile(r"|".join([re.escape(x) for x in placeholders if x]))
 
-    def filter(
-        self: AwesomePlaceholders, _lexer: Any, stream: TokenStream
-    ) -> TokenStream:
+    def filter(self: AwesomePlaceholders, _lexer: Any, stream: TokenStream) -> TokenStream:
         """Filter on all tokens.
 
         The ``lexer`` instance is required by the parent class, but isn't used here.
@@ -154,9 +148,7 @@ class AwesomeHtmlFormatter(HtmlFormatter):  # type: ignore
 
         super().__init__(**options)
 
-    def _highlight_lines(
-        self: AwesomeHtmlFormatter, tokensource: TokenStream
-    ) -> TokenStream:
+    def _highlight_lines(self: AwesomeHtmlFormatter, tokensource: TokenStream) -> TokenStream:
         """Highlight added, removed, and emphasized lines.
 
         In contrast to Pygments, use ``<mark>``, ``<ins>``, and ``<del>`` elements.
@@ -249,8 +241,7 @@ class AwesomeCodeBlock(CodeBlock):
             line_numbers = parselinenos(linespec, nlines)
             if any(i >= nlines for i in line_numbers):
                 logger.warning(
-                    __("line number spec is out of range(1-%d): %r")
-                    % (nlines, linespec),
+                    __("line number spec is out of range(1-%d): %r") % (nlines, linespec),
                     location=location,
                 )
             return [i + 1 for i in line_numbers if i < nlines]
@@ -329,9 +320,7 @@ class AwesomePygmentsBridge(PygmentsBridge):
         if hl_text:
             opts["hl_text"] = hl_text
 
-        return pygmentsbridge_highlight_block(
-            self, source, lang, opts, force, location, **kwargs
-        )
+        return pygmentsbridge_highlight_block(self, source, lang, opts, force, location, **kwargs)
 
 
 def setup(app: Sphinx) -> dict[str, Any]:

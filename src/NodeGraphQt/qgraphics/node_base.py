@@ -1,22 +1,22 @@
 #!/usr/bin/python
 from collections import OrderedDict
 
-from qtpy import QtGui, QtCore, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 
 from NodeGraphQt.constants import (
-    ITEM_CACHE_MODE,
     ICON_NODE_BASE,
+    ITEM_CACHE_MODE,
+    Z_VAL_NODE,
     LayoutDirectionEnum,
     NodeEnum,
     PortEnum,
     PortTypeEnum,
-    Z_VAL_NODE
 )
 from NodeGraphQt.errors import NodeWidgetError
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.node_overlay_disabled import XDisabledItem
 from NodeGraphQt.qgraphics.node_text_item import NodeTextItem
-from NodeGraphQt.qgraphics.port import PortItem, CustomPortItem
+from NodeGraphQt.qgraphics.port import CustomPortItem, PortItem
 
 
 class NodeItem(AbstractNodeItem):
@@ -28,19 +28,16 @@ class NodeItem(AbstractNodeItem):
         parent (QtWidgets.QGraphicsItem): parent item.
     """
 
-    def __init__(self, name='node', parent=None):
+    def __init__(self, name="node", parent=None):
         super(NodeItem, self).__init__(name, parent)
         pixmap = QtGui.QPixmap(ICON_NODE_BASE)
         if pixmap.size().height() > NodeEnum.ICON_SIZE.value:
-            pixmap = pixmap.scaledToHeight(
-                NodeEnum.ICON_SIZE.value,
-                QtCore.Qt.SmoothTransformation
-            )
-        self._properties['icon'] = ICON_NODE_BASE
+            pixmap = pixmap.scaledToHeight(NodeEnum.ICON_SIZE.value, QtCore.Qt.TransformationMode.SmoothTransformation)
+        self._properties["icon"] = ICON_NODE_BASE
         self._icon_item = QtWidgets.QGraphicsPixmapItem(pixmap, self)
-        self._icon_item.setTransformationMode(QtCore.Qt.SmoothTransformation)
+        self._icon_item.setTransformationMode(QtCore.Qt.TransformationMode.SmoothTransformation)
         self._text_item = NodeTextItem(self.name, self)
-        self._x_item = XDisabledItem(self, 'DISABLED')
+        self._x_item = XDisabledItem(self, "DISABLED")
         self._input_items = OrderedDict()
         self._output_items = OrderedDict()
         self._widgets = OrderedDict()
@@ -75,10 +72,9 @@ class NodeItem(AbstractNodeItem):
         # base background.
         margin = 1.0
         rect = self.boundingRect()
-        rect = QtCore.QRectF(rect.left() + margin,
-                             rect.top() + margin,
-                             rect.width() - (margin * 2),
-                             rect.height() - (margin * 2))
+        rect = QtCore.QRectF(
+            rect.left() + margin, rect.top() + margin, rect.width() - (margin * 2), rect.height() - (margin * 2)
+        )
 
         radius = 4.0
         painter.setBrush(QtGui.QColor(*self.color))
@@ -92,10 +88,12 @@ class NodeItem(AbstractNodeItem):
         # node name background.
         padding = 3.0, 2.0
         text_rect = self._text_item.boundingRect()
-        text_rect = QtCore.QRectF(text_rect.x() + padding[0],
-                                  rect.y() + padding[1],
-                                  rect.width() - padding[0] - margin,
-                                  text_rect.height() - (padding[1] * 2))
+        text_rect = QtCore.QRectF(
+            text_rect.x() + padding[0],
+            rect.y() + padding[1],
+            rect.width() - padding[0] - margin,
+            text_rect.height() - (padding[1] * 2),
+        )
         if self.selected:
             painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
         else:
@@ -105,15 +103,12 @@ class NodeItem(AbstractNodeItem):
         # node border
         if self.selected:
             border_width = 1.2
-            border_color = QtGui.QColor(
-                *NodeEnum.SELECTED_BORDER_COLOR.value
-            )
+            border_color = QtGui.QColor(*NodeEnum.SELECTED_BORDER_COLOR.value)
         else:
             border_width = 0.8
             border_color = QtGui.QColor(*self.border_color)
 
-        border_rect = QtCore.QRectF(rect.left(), rect.top(),
-                                    rect.width(), rect.height())
+        border_rect = QtCore.QRectF(rect.left(), rect.top(), rect.width(), rect.height())
 
         pen = QtGui.QPen(border_color, border_width)
         pen.setCosmetic(self.viewer().get_zoom() < 0.0)
@@ -133,10 +128,9 @@ class NodeItem(AbstractNodeItem):
         # base background.
         margin = 1.0
         rect = self.boundingRect()
-        rect = QtCore.QRectF(rect.left() + margin,
-                             rect.top() + margin,
-                             rect.width() - (margin * 2),
-                             rect.height() - (margin * 2))
+        rect = QtCore.QRectF(
+            rect.left() + margin, rect.top() + margin, rect.width() - (margin * 2), rect.height() - (margin * 2)
+        )
 
         radius = 4.0
         painter.setBrush(QtGui.QColor(*self.color))
@@ -144,9 +138,7 @@ class NodeItem(AbstractNodeItem):
 
         # light overlay on background when selected.
         if self.selected:
-            painter.setBrush(
-                QtGui.QColor(*NodeEnum.SELECTED_COLOR.value)
-            )
+            painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
             painter.drawRoundedRect(rect, radius, radius)
 
         # top & bottom edge background.
@@ -157,8 +149,7 @@ class NodeItem(AbstractNodeItem):
         else:
             painter.setBrush(QtGui.QColor(0, 0, 0, 80))
         for y in [rect.y() + padding, rect.height() - height - 1]:
-            edge_rect = QtCore.QRectF(rect.x() + padding, y,
-                                     rect.width() - (padding * 2), height)
+            edge_rect = QtCore.QRectF(rect.x() + padding, y, rect.width() - (padding * 2), height)
             painter.drawRoundedRect(edge_rect, 3.0, 3.0)
 
         # node border
@@ -166,11 +157,8 @@ class NodeItem(AbstractNodeItem):
         border_color = QtGui.QColor(*self.border_color)
         if self.selected:
             border_width = 1.2
-            border_color = QtGui.QColor(
-                *NodeEnum.SELECTED_BORDER_COLOR.value
-            )
-        border_rect = QtCore.QRectF(rect.left(), rect.top(),
-                                    rect.width(), rect.height())
+            border_color = QtGui.QColor(*NodeEnum.SELECTED_BORDER_COLOR.value)
+        border_rect = QtCore.QRectF(rect.left(), rect.top(), rect.width(), rect.height())
 
         pen = QtGui.QPen(border_color, border_width)
         pen.setCosmetic(self.viewer().get_zoom() < 0.0)
@@ -196,7 +184,7 @@ class NodeItem(AbstractNodeItem):
         elif self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
             self._paint_vertical(painter, option, widget)
         else:
-            raise RuntimeError('Node graph layout direction not valid!')
+            raise RuntimeError("Node graph layout direction not valid!")
 
     def mousePressEvent(self, event):
         """
@@ -275,10 +263,10 @@ class NodeItem(AbstractNodeItem):
         Args:
             state (bool): node disable state.
         """
-        tooltip = '<b>{}</b>'.format(self.name)
+        tooltip = "<b>{}</b>".format(self.name)
         if state:
             tooltip += ' <font color="red"><b>(DISABLED)</b></font>'
-        tooltip += '<br/>{}<br/>'.format(self.type_)
+        tooltip += "<br/>{}<br/>".format(self.type_)
         self.setToolTip(tooltip)
 
     def _set_base_size(self, add_w=0.0, add_h=0.0):
@@ -443,7 +431,7 @@ class NodeItem(AbstractNodeItem):
         elif self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
             width, height = self._calc_size_vertical()
         else:
-            raise RuntimeError('Node graph layout direction not valid!')
+            raise RuntimeError("Node graph layout direction not valid!")
 
         # additional width, height.
         width += add_w
@@ -478,7 +466,7 @@ class NodeItem(AbstractNodeItem):
         elif self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
             self._align_icon_vertical(h_offset, v_offset)
         else:
-            raise RuntimeError('Node graph layout direction not valid!')
+            raise RuntimeError("Node graph layout direction not valid!")
 
     def _align_label_horizontal(self, h_offset, v_offset):
         rect = self.boundingRect()
@@ -505,7 +493,7 @@ class NodeItem(AbstractNodeItem):
         elif self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
             self._align_label_vertical(h_offset, v_offset)
         else:
-            raise RuntimeError('Node graph layout direction not valid!')
+            raise RuntimeError("Node graph layout direction not valid!")
 
     def _align_widgets_horizontal(self, v_offset):
         if not self._widgets:
@@ -520,13 +508,13 @@ class NodeItem(AbstractNodeItem):
             widget_rect = widget.boundingRect()
             if not inputs:
                 x = rect.left() + 10
-                widget.widget().setTitleAlign('left')
+                widget.widget().setTitleAlign("left")
             elif not outputs:
                 x = rect.right() - widget_rect.width() - 10
-                widget.widget().setTitleAlign('right')
+                widget.widget().setTitleAlign("right")
             else:
                 x = rect.center().x() - (widget_rect.width() / 2)
-                widget.widget().setTitleAlign('center')
+                widget.widget().setTitleAlign("center")
             widget.setPos(x, y)
             y += widget_rect.height()
 
@@ -548,7 +536,7 @@ class NodeItem(AbstractNodeItem):
                 continue
             widget_rect = widget.boundingRect()
             x = rect.center().x() - (widget_rect.width() / 2)
-            widget.widget().setTitleAlign('center')
+            widget.widget().setTitleAlign("center")
             widget.setPos(x, y)
             y += widget_rect.height()
 
@@ -564,7 +552,7 @@ class NodeItem(AbstractNodeItem):
         elif self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
             self._align_widgets_vertical(v_offset)
         else:
-            raise RuntimeError('Node graph layout direction not valid!')
+            raise RuntimeError("Node graph layout direction not valid!")
 
     def _align_ports_horizontal(self, v_offset):
         width = self._width
@@ -643,7 +631,7 @@ class NodeItem(AbstractNodeItem):
         elif self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
             self._align_ports_vertical(v_offset)
         else:
-            raise RuntimeError('Node graph layout direction not valid!')
+            raise RuntimeError("Node graph layout direction not valid!")
 
     def _draw_node_horizontal(self):
         height = self._text_item.boundingRect().height() + 4.0
@@ -715,7 +703,7 @@ class NodeItem(AbstractNodeItem):
         elif self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
             self._draw_node_vertical()
         else:
-            raise RuntimeError('Node graph layout direction not valid!')
+            raise RuntimeError("Node graph layout direction not valid!")
 
     def post_init(self, viewer=None, pos=None):
         """
@@ -741,10 +729,8 @@ class NodeItem(AbstractNodeItem):
             return
 
         rect = self.sceneBoundingRect()
-        l = self.viewer().mapToGlobal(
-            self.viewer().mapFromScene(rect.topLeft()))
-        r = self.viewer().mapToGlobal(
-            self.viewer().mapFromScene(rect.topRight()))
+        l = self.viewer().mapToGlobal(self.viewer().mapFromScene(rect.topLeft()))
+        r = self.viewer().mapToGlobal(self.viewer().mapFromScene(rect.topRight()))
         # width is the node width in screen
         width = r.x() - l.x()
 
@@ -792,18 +778,15 @@ class NodeItem(AbstractNodeItem):
 
     @property
     def icon(self):
-        return self._properties['icon']
+        return self._properties["icon"]
 
     @icon.setter
     def icon(self, path=None):
-        self._properties['icon'] = path
+        self._properties["icon"] = path
         path = path or ICON_NODE_BASE
         pixmap = QtGui.QPixmap(path)
         if pixmap.size().height() > NodeEnum.ICON_SIZE.value:
-            pixmap = pixmap.scaledToHeight(
-                NodeEnum.ICON_SIZE.value,
-                QtCore.Qt.SmoothTransformation
-            )
+            pixmap = pixmap.scaledToHeight(NodeEnum.ICON_SIZE.value, QtCore.Qt.SmoothTransformation)
         self._icon_item.setPixmap(pixmap)
         if self.scene():
             self.post_init()
@@ -843,7 +826,7 @@ class NodeItem(AbstractNodeItem):
             self.highlight_pipes()
 
     @AbstractNodeItem.name.setter
-    def name(self, name=''):
+    def name(self, name=""):
         AbstractNodeItem.name.fset(self, name)
         if name == self._text_item.toPlainText():
             return
@@ -924,8 +907,7 @@ class NodeItem(AbstractNodeItem):
             self.post_init()
         return port
 
-    def add_input(self, name='input', multi_port=False, display_name=True,
-                  locked=False, painter_func=None):
+    def add_input(self, name="input", multi_port=False, display_name=True, locked=False, painter_func=None):
         """
         Adds a port qgraphics item into the node with the "port_type" set as
         IN_PORT.
@@ -951,8 +933,7 @@ class NodeItem(AbstractNodeItem):
         port.locked = locked
         return self._add_port(port)
 
-    def add_output(self, name='output', multi_port=False, display_name=True,
-                   locked=False, painter_func=None):
+    def add_output(self, name="output", multi_port=False, display_name=True, locked=False, painter_func=None):
         """
         Adds a port qgraphics item into the node with the "port_type" set as
         OUT_PORT.
@@ -1049,7 +1030,7 @@ class NodeItem(AbstractNodeItem):
 
     def from_dict(self, node_dict):
         super(NodeItem, self).from_dict(node_dict)
-        custom_prop = node_dict.get('custom') or {}
+        custom_prop = node_dict.get("custom") or {}
         for prop_name, value in custom_prop.items():
             prop_widget = self._widgets.get(prop_name)
             if prop_widget:

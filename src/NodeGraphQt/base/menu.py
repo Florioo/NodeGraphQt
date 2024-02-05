@@ -2,7 +2,7 @@
 import re
 from distutils.version import LooseVersion
 
-from qtpy import QtGui, QtCore
+from qtpy import QtCore, QtGui
 
 from NodeGraphQt.errors import NodeMenuError
 from NodeGraphQt.widgets.actions import BaseMenu, GraphAction, NodeAction
@@ -38,8 +38,7 @@ class NodeGraphMenu(object):
         self._items = []
 
     def __repr__(self):
-        return '<{}("{}") object at {}>'.format(
-            self.__class__.__name__, self.name(), hex(id(self)))
+        return '<{}("{}") object at {}>'.format(self.__class__.__name__, self.name(), hex(id(self)))
 
     @property
     def qmenu(self):
@@ -115,14 +114,12 @@ class NodeGraphMenu(object):
     @staticmethod
     def _set_shortcut(action, shortcut):
         if isinstance(shortcut, str):
-            search = re.search(r'(?:\.|)QKeySequence\.(\w+)', shortcut)
+            search = re.search(r"(?:\.|)QKeySequence\.(\w+)", shortcut)
             if search:
                 shortcut = getattr(QtGui.QKeySequence, search.group(1))
-            elif all([i in ['Alt', 'Enter'] for i in shortcut.split('+')]):
-                shortcut = QtGui.QKeySequence(
-                    QtCore.Qt.Modifier.ALT | QtCore.Qt.Key.Key_Return
-                )
-            elif all([i in ['Return', 'Enter'] for i in shortcut.split('+')]):
+            elif all([i in ["Alt", "Enter"] for i in shortcut.split("+")]):
+                shortcut = QtGui.QKeySequence(QtCore.Qt.Modifier.ALT | QtCore.Qt.Key.Key_Return)
+            elif all([i in ["Return", "Enter"] for i in shortcut.split("+")]):
                 shortcut = QtCore.Qt.Key.Key_Return
         if shortcut:
             action.setShortcut(shortcut)
@@ -141,7 +138,7 @@ class NodeGraphMenu(object):
         """
         action = GraphAction(name, self._graph.viewer())
         action.graph = self._graph
-        if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
+        if LooseVersion(QtCore.qVersion()) >= LooseVersion("5.10"):
             action.setShortcutVisibleInContextMenu(True)
 
         if shortcut:
@@ -182,8 +179,7 @@ class NodesMenu(NodeGraphMenu):
         nodes_menu = node_graph.get_context_menu('nodes')
     """
 
-    def add_command(self, name, func=None, node_type=None, node_class=None,
-                    shortcut=None):
+    def add_command(self, name, func=None, node_type=None, node_class=None, shortcut=None):
         """
         Re-implemented to add a command to the specified node type menu.
 
@@ -198,7 +194,7 @@ class NodesMenu(NodeGraphMenu):
             NodeGraphQt.NodeGraphCommand: the appended command.
         """
         if not node_type and not node_class:
-            raise NodeMenuError('Node type or Node class not specified!')
+            raise NodeMenuError("Node type or Node class not specified!")
 
         if node_class:
             node_type = node_class.__name__
@@ -218,7 +214,7 @@ class NodesMenu(NodeGraphMenu):
 
         action = NodeAction(name, self._graph.viewer())
         action.graph = self._graph
-        if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
+        if LooseVersion(QtCore.qVersion()) >= LooseVersion("5.10"):
             action.setShortcutVisibleInContextMenu(True)
 
         if shortcut:
@@ -256,8 +252,7 @@ class NodeGraphCommand(object):
         self._func = func
 
     def __repr__(self):
-        return '<{}("{}") object at {}>'.format(
-            self.__class__.__name__, self.name(), hex(id(self)))
+        return '<{}("{}") object at {}>'.format(self.__class__.__name__, self.name(), hex(id(self)))
 
     @property
     def qaction(self):

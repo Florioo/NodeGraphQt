@@ -1,11 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os
-
-from qtpy import QtWidgets
 from enum import Enum
 
-from .pkg_info import __version__ as _v
+from qtpy import QtWidgets
 
 __doc__ = """
 | The :py:mod:`NodeGraphQt.constants` namespace contains variables and enums 
@@ -14,15 +12,15 @@ __doc__ = """
 
 # ================================== PRIVATE ===================================
 
-MIME_TYPE = 'nodegraphqt/nodes'
-URI_SCHEME = 'nodegraphqt://'
-URN_SCHEME = 'nodegraphqt::'
+MIME_TYPE = "nodegraphqt/nodes"
+URI_SCHEME = "nodegraphqt://"
+URN_SCHEME = "nodegraphqt::"
 
 # PATHS
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
-ICON_PATH = os.path.join(BASE_PATH, 'widgets', 'icons')
-ICON_DOWN_ARROW = os.path.join(ICON_PATH, 'down_arrow.png')
-ICON_NODE_BASE = os.path.join(ICON_PATH, 'node_base.png')
+ICON_PATH = os.path.join(BASE_PATH, "widgets", "icons")
+ICON_DOWN_ARROW = os.path.join(ICON_PATH, "down_arrow.png")
+ICON_NODE_BASE = os.path.join(ICON_PATH, "node_base.png")
 
 # DRAW STACK ORDER
 Z_VAL_BACKDROP = -2
@@ -35,28 +33,15 @@ Z_VAL_NODE_WIDGET = 3
 # QGraphicsItem.NoCache
 # QGraphicsItem.DeviceCoordinateCache
 # QGraphicsItem.ItemCoordinateCache
-ITEM_CACHE_MODE = QtWidgets.QGraphicsItem.DeviceCoordinateCache
+ITEM_CACHE_MODE = QtWidgets.QGraphicsItem.CacheMode.DeviceCoordinateCache
+
 
 # =================================== GLOBAL ===================================
 class BaseColors:
-    BACKGROUND_COLOR = (255,255,255)
-    FG_COLOR = (26*2, 36*2, 46*2, 255)
+    BACKGROUND_COLOR = (255, 255, 255)
+    FG_COLOR = (26 * 2, 36 * 2, 46 * 2, 255)
     BORDER_COLOR = (74, 84, 85, 255)
     TEXT_COLOR = (255, 255, 255, 220)
-
-class VersionEnum(Enum):
-    """
-    Current framework version.
-    :py:mod:`NodeGraphQt.constants.VersionEnum`
-    """
-    #: current version string.
-    VERSION = _v
-    #: version major int.
-    MAJOR = int(_v.split('.')[0])
-    #: version minor int.
-    MINOR = int(_v.split('.')[1])
-    #: version patch int.
-    PATCH = int(_v.split('.')[2])
 
 
 class LayoutDirectionEnum(Enum):
@@ -64,6 +49,7 @@ class LayoutDirectionEnum(Enum):
     Node graph nodes layout direction:
     :py:mod:`NodeGraphQt.constants.ViewerLayoutEnum`
     """
+
     #: layout nodes left to right.
     HORIZONTAL = 0
     #: layout nodes top to bottom.
@@ -78,6 +64,7 @@ class ViewerEnum(Enum):
     Node graph viewer styling layout:
     :py:mod:`NodeGraphQt.constants.ViewerEnum`
     """
+
     #: light background color for the node graph.
     BACKGROUND_COLOR = BaseColors.BACKGROUND_COLOR
     #: style node graph background with no grid or dots.
@@ -92,24 +79,27 @@ class ViewerEnum(Enum):
     GRID_COLOR = (230, 230, 230)  # Slightly darker than the background
 
 
-
 class ViewerNavEnum(Enum):
     """
     Node graph viewer navigation styling layout:
     :py:mod:`NodeGraphQt.constants.ViewerNavEnum`
     """
+
     #: default background color.
     BACKGROUND_COLOR = (25, 25, 25)
     #: default item color.
     ITEM_COLOR = (35, 35, 35)
 
+
 # ==================================== NODE ====================================
+
 
 class NodeEnum(Enum):
     """
     Node styling layout:
     :py:mod:`NodeGraphQt.constants.NodeEnum`
     """
+
     #: default node width.
     WIDTH = 160
     #: default node height.
@@ -121,6 +111,7 @@ class NodeEnum(Enum):
     #: default node border color when selected.
     SELECTED_BORDER_COLOR = (254, 0, 0, 255)
 
+
 # ==================================== PORT ====================================
 
 
@@ -129,6 +120,7 @@ class PortEnum(Enum):
     Port styling layout:
     :py:mod:`NodeGraphQt.constants.PortEnum`
     """
+
     #: default port size.
     SIZE = 22.0
     #: default port color for light theme. (r, g, b, a)
@@ -152,18 +144,22 @@ class PortTypeEnum(Enum):
     Port connection types:
     :py:mod:`NodeGraphQt.constants.PortTypeEnum`
     """
+
     #: Connection type for input ports.
-    IN = 'in'
+    IN = "in"
     #: Connection type for output ports.
-    OUT = 'out'
+    OUT = "out"
+
 
 # ==================================== PIPE ====================================
+
 
 class PipeEnum(Enum):
     """
     Pipe styling layout:
     :py:mod:`NodeGraphQt.constants.PipeEnum`
     """
+
     #: default width.
     WIDTH = 1.2
     #: default color for light theme.
@@ -187,6 +183,7 @@ class PipeSlicerEnum(Enum):
     Slicer Pipe styling layout:
     :py:mod:`NodeGraphQt.constants.PipeSlicerEnum`
     """
+
     #: default width.
     WIDTH = 1.5
     #: default color.
@@ -198,6 +195,7 @@ class PipeLayoutEnum(Enum):
     Pipe connection drawing layout:
     :py:mod:`NodeGraphQt.constants.PipeLayoutEnum`
     """
+
     #: draw straight lines for pipe connections.
     STRAIGHT = 0
     #: draw curved lines for pipe connections.
@@ -208,6 +206,7 @@ class PipeLayoutEnum(Enum):
 
 # === PROPERTY BIN WIDGET ===
 
+
 class NodePropWidgetEnum(Enum):
     """
     Mapping used for the :class:`NodeGraphQt.PropertiesBinWidget` to display a
@@ -215,6 +214,7 @@ class NodePropWidgetEnum(Enum):
 
     :py:mod:`NodeGraphQt.constants.NodePropWidgetEnum`
     """
+
     #: Node property will be hidden in the ``PropertiesBinWidget`` (default).
     HIDDEN = 0
     #: Node property represented with a ``QLabel`` widget.

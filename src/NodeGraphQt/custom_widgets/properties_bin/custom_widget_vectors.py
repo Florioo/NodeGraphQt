@@ -25,9 +25,7 @@ class _PropVector(BaseProperty):
     def _add_item(self, index):
         _ledit = _NumberValueEdit()
         _ledit.index = index
-        _ledit.value_changed.connect(
-            lambda: self._on_value_change(_ledit.get_value(), _ledit.index)
-        )
+        _ledit.value_changed.connect(lambda: self._on_value_change(_ledit.get_value(), _ledit.index))
 
         self.layout().addWidget(_ledit)
         self._value.append(0.0)
@@ -42,8 +40,7 @@ class _PropVector(BaseProperty):
 
     def _update_items(self):
         if not isinstance(self._value, (list, tuple)):
-            raise TypeError('Value "{}" must be either list or tuple.'
-                            .format(self._value))
+            raise TypeError('Value "{}" must be either list or tuple.'.format(self._value))
         for index, value in enumerate(self._value):
             if (index + 1) > len(self._items):
                 continue

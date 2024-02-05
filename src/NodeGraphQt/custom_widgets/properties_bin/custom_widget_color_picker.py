@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from qtpy import QtWidgets, QtCore, QtGui
+from qtpy import QtCore, QtGui, QtWidgets
 
 from .custom_widget_vectors import PropVector3, PropVector4
 from .prop_widgets_abstract import BaseProperty
@@ -46,16 +46,14 @@ class PropColorPickerRGB(BaseProperty):
 
     def _update_color(self):
         c = [int(max(min(i, 255), 0)) for i in self._color]
-        hex_color = '#{0:02x}{1:02x}{2:02x}'.format(*c)
+        hex_color = "#{0:02x}{1:02x}{2:02x}".format(*c)
         self._button.setStyleSheet(
-            '''
+            """
             QPushButton {{background-color: rgba({0}, {1}, {2}, 255);}}
             QPushButton::hover {{background-color: rgba({0}, {1}, {2}, 200);}}
-            '''.format(*c)
+            """.format(*c)
         )
-        self._button.setToolTip(
-            'rgb: {}\nhex: {}'.format(self._color[:3], hex_color)
-        )
+        self._button.setToolTip("rgb: {}\nhex: {}".format(self._color[:3], hex_color))
 
     def set_data_type(self, data_type):
         """
@@ -104,16 +102,14 @@ class PropColorPickerRGBA(PropColorPickerRGB):
 
     def _update_color(self):
         c = [int(max(min(i, 255), 0)) for i in self._color]
-        hex_color = '#{0:02x}{1:02x}{2:02x}{3:03x}'.format(*c)
+        hex_color = "#{0:02x}{1:02x}{2:02x}{3:03x}".format(*c)
         self._button.setStyleSheet(
-            '''
+            """
             QPushButton {{background-color: rgba({0}, {1}, {2}, {3});}}
             QPushButton::hover {{background-color: rgba({0}, {1}, {2}, {3});}}
-            '''.format(*c)
+            """.format(*c)
         )
-        self._button.setToolTip(
-            'rgba: {}\nhex: {}'.format(self._color, hex_color)
-        )
+        self._button.setToolTip("rgba: {}\nhex: {}".format(self._color, hex_color))
 
     def get_value(self):
         return self._color[:4]

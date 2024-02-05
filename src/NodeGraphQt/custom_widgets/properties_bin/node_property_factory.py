@@ -1,17 +1,18 @@
 from NodeGraphQt.constants import NodePropWidgetEnum
+
 from .custom_widget_color_picker import PropColorPickerRGB, PropColorPickerRGBA
 from .custom_widget_file_paths import PropFilePath, PropFileSavePath
-from .custom_widget_slider import PropSlider, PropDoubleSlider
+from .custom_widget_slider import PropDoubleSlider, PropSlider
 from .custom_widget_value_edit import FloatValueEdit, IntValueEdit
 from .custom_widget_vectors import PropVector2, PropVector3, PropVector4
 from .prop_widgets_base import (
+    PropCheckBox,
+    PropComboBox,
+    PropDoubleSpinBox,
     PropLabel,
     PropLineEdit,
-    PropTextEdit,
-    PropComboBox,
-    PropCheckBox,
     PropSpinBox,
-    PropDoubleSpinBox
+    PropTextEdit,
 )
 
 

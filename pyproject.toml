@@ -2,14 +2,37 @@
 name = "NodeGraphQt"
 version = "0.1.0"
 description = "Node graph framework for PySide2/PyQt5 that can be implemented and re-purposed into applications."
-authors = ["Johnny Chan"]
+authors = ["Johnny Chan", "Floris Vernieuwe"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10,<3.13"
 qtpy = "^2.4.1"
 
+[tool.pyright]
+include = ["src", "examples"]
+
+[tool.poetry.group.dev.dependencies]
+pyside6 = "^6.6.1"
+ruff = "^0.2.0"
+
+[tool.black]
+line-length = 120
+
+[tool.pyright.defineConstant]
+PYQT5 = false
+PYSIDE2 = false
+PYQT6 = false
+PYSIDE6 = true
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+
+[tool.ruff.lint]
+select = ["E", "F"]
+
+[tool.ruff]
+exclude = [".venv", "src/main/python/ui", "packages/NodeGraphQt"]
+line-length = 120
+extend-select = ["I"]

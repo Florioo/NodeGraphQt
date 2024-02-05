@@ -37,10 +37,7 @@ def check_deprecated(app: Sphinx, config: Config) -> None:  # noqa: C901
     found_deprecated = False
 
     if "html_collapsible_definitions" in raw:
-        logger.warning(
-            "`html_collapsible_definitions` is deprecated. "
-            "Use the `sphinx-design` extension instead."
-        )
+        logger.warning("`html_collapsible_definitions` is deprecated. " "Use the `sphinx-design` extension instead.")
         found_deprecated = True
 
     if "html_awesome_headerlinks" in raw:
@@ -48,9 +45,7 @@ def check_deprecated(app: Sphinx, config: Config) -> None:  # noqa: C901
             "`html_awesome_headerlinks` is deprecated. "
             "Use `html_theme_options = {'awesome_headerlinks: True '} instead."
         )
-        config.html_theme_options["awesome_headerlinks"] = raw[
-            "html_awesome_headerlinks"
-        ]
+        config.html_theme_options["awesome_headerlinks"] = raw["html_awesome_headerlinks"]
         found_deprecated = True
 
     if "html_awesome_external_links" in raw:
@@ -58,17 +53,12 @@ def check_deprecated(app: Sphinx, config: Config) -> None:  # noqa: C901
             "`html_awesome_external_links` is deprecated. "
             "Use `html_theme_options = {'awesome_external_links: True '} instead."
         )
-        config.html_theme_options["awesome_external_links"] = raw[
-            "html_awesome_external_links"
-        ]
+        config.html_theme_options["awesome_external_links"] = raw["html_awesome_external_links"]
         found_deprecated = True
 
     # Since this won't have any effect, it shouldn't be a warning.
     if "html_awesome_code_headers" in raw:
-        logger.info(
-            "`html_awesome_code_headers` is deprecated. "
-            "You can remove it from your Sphinx configuration."
-        )
+        logger.info("`html_awesome_code_headers` is deprecated. " "You can remove it from your Sphinx configuration.")
         found_deprecated = True
 
     if "html_awesome_docsearch" in raw:
@@ -108,9 +98,7 @@ def check_deprecated(app: Sphinx, config: Config) -> None:  # noqa: C901
                 config.docsearch_container = ds_conf["container"]  # type: ignore[attr-defined]
 
     if found_deprecated is False:
-        logger.info(
-            "No deprecated options found. You can remove the `sphinxawesome_theme.deprecated` extension."
-        )
+        logger.info("No deprecated options found. You can remove the `sphinxawesome_theme.deprecated` extension.")
 
 
 def setup(app: Sphinx) -> dict[str, Any]:
@@ -125,24 +113,12 @@ def setup(app: Sphinx) -> dict[str, Any]:
         app.setup_extension("sphinxawesome_theme.docsearch")
 
     # If we don't register these options, Sphinx ignores them when evaluating the `conf.py` file.
-    app.add_config_value(
-        name="html_collapsible_definitions", default=False, rebuild="html", types=(bool)
-    )
-    app.add_config_value(
-        name="html_awesome_external_links", default=False, rebuild="html", types=(bool)
-    )
-    app.add_config_value(
-        name="html_awesome_docsearch", default=False, rebuild="html", types=(bool)
-    )
-    app.add_config_value(
-        name="docsearch_config", default={}, rebuild="html", types=(dict)
-    )
-    app.add_config_value(
-        name="html_awesome_headerlinks", default=True, rebuild="html", types=(str)
-    )
-    app.add_config_value(
-        name="html_awesome_code_headers", default=True, rebuild="html", types=(str)
-    )
+    app.add_config_value(name="html_collapsible_definitions", default=False, rebuild="html", types=(bool))
+    app.add_config_value(name="html_awesome_external_links", default=False, rebuild="html", types=(bool))
+    app.add_config_value(name="html_awesome_docsearch", default=False, rebuild="html", types=(bool))
+    app.add_config_value(name="docsearch_config", default={}, rebuild="html", types=(dict))
+    app.add_config_value(name="html_awesome_headerlinks", default=True, rebuild="html", types=(str))
+    app.add_config_value(name="html_awesome_code_headers", default=True, rebuild="html", types=(str))
 
     app.connect("config-inited", check_deprecated)
 

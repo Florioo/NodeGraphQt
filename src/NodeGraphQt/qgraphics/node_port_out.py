@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from qtpy import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui
 
 from NodeGraphQt.constants import NodeEnum
 from NodeGraphQt.qgraphics.node_base import NodeItem
@@ -14,11 +14,11 @@ class PortOutputNodeItem(NodeItem):
         parent (QtWidgets.QGraphicsItem): parent item.
     """
 
-    def __init__(self, name='group port', parent=None):
+    def __init__(self, name="group port", parent=None):
         super(PortOutputNodeItem, self).__init__(name, parent)
         self._icon_item.setVisible(False)
         self._text_item.set_locked(True)
-        self._x_item.text = 'Port Locked'
+        self._x_item.text = "Port Locked"
 
     def _set_base_size(self, add_w=0.0, add_h=0.0):
         width, height = self.calc_size(add_w, add_h)
@@ -34,17 +34,16 @@ class PortOutputNodeItem(NodeItem):
 
         margin = 2.0
         rect = self.boundingRect()
-        rect = QtCore.QRectF(rect.left() + margin,
-                             rect.top() + margin,
-                             rect.width() - (margin * 2),
-                             rect.height() - (margin * 2))
+        rect = QtCore.QRectF(
+            rect.left() + margin, rect.top() + margin, rect.width() - (margin * 2), rect.height() - (margin * 2)
+        )
 
         text_rect = self._text_item.boundingRect()
         text_rect = QtCore.QRectF(
             rect.center().x() - (text_rect.width() / 2) - 5,
             rect.center().y() - (text_rect.height() / 2),
             text_rect.width() + 10,
-            text_rect.height()
+            text_rect.height(),
         )
 
         painter.setBrush(QtGui.QColor(255, 255, 255, 20))
@@ -65,9 +64,7 @@ class PortOutputNodeItem(NodeItem):
         poly = transform.map(triangle)
 
         if self.selected:
-            pen = QtGui.QPen(
-                QtGui.QColor(*NodeEnum.SELECTED_BORDER_COLOR.value), 1.3
-            )
+            pen = QtGui.QPen(QtGui.QColor(*NodeEnum.SELECTED_BORDER_COLOR.value), 1.3)
             painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
         else:
             pen = QtGui.QPen(QtGui.QColor(*self.border_color), 1.2)
@@ -78,9 +75,7 @@ class PortOutputNodeItem(NodeItem):
         painter.drawPolygon(poly)
 
         edge_size = 30
-        edge_rect = QtCore.QRectF(rect.x() + (size * 1.6),
-                                  rect.center().y() - (edge_size / 2),
-                                  4, edge_size)
+        edge_rect = QtCore.QRectF(rect.x() + (size * 1.6), rect.center().y() - (edge_size / 2), 4, edge_size)
         painter.drawRect(edge_rect)
 
         painter.restore()
@@ -94,17 +89,16 @@ class PortOutputNodeItem(NodeItem):
 
         margin = 2.0
         rect = self.boundingRect()
-        rect = QtCore.QRectF(rect.left() + margin,
-                             rect.top() + margin,
-                             rect.width() - (margin * 2),
-                             rect.height() - (margin * 2))
+        rect = QtCore.QRectF(
+            rect.left() + margin, rect.top() + margin, rect.width() - (margin * 2), rect.height() - (margin * 2)
+        )
 
         text_rect = self._text_item.boundingRect()
         text_rect = QtCore.QRectF(
             rect.center().x() - (text_rect.width() / 2) - 5,
             rect.height() - text_rect.height(),
             text_rect.width() + 10,
-            text_rect.height()
+            text_rect.height(),
         )
 
         painter.setBrush(QtGui.QColor(255, 255, 255, 20))
@@ -125,9 +119,7 @@ class PortOutputNodeItem(NodeItem):
         poly = transform.map(triangle)
 
         if self.selected:
-            pen = QtGui.QPen(
-                QtGui.QColor(*NodeEnum.SELECTED_BORDER_COLOR.value), 1.3
-            )
+            pen = QtGui.QPen(QtGui.QColor(*NodeEnum.SELECTED_BORDER_COLOR.value), 1.3)
             painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
         else:
             pen = QtGui.QPen(QtGui.QColor(*self.border_color), 1.2)
@@ -138,9 +130,7 @@ class PortOutputNodeItem(NodeItem):
         painter.drawPolygon(poly)
 
         edge_size = 30
-        edge_rect = QtCore.QRectF(rect.center().x() - (edge_size / 2),
-                                  rect.y() + (size * 1.6),
-                                  edge_size, 4)
+        edge_rect = QtCore.QRectF(rect.center().x() - (edge_size / 2), rect.y() + (size * 1.6), edge_size, 4)
         painter.drawRect(edge_rect)
 
         painter.restore()

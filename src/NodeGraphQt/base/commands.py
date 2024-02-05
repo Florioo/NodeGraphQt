@@ -34,7 +34,7 @@ class PropertyChangedCmd(QtWidgets.QUndoCommand):
         view = self.node.view
 
         # view widgets.
-        if hasattr(view, 'widgets') and name in view.widgets.keys():
+        if hasattr(view, "widgets") and name in view.widgets.keys():
             # check if previous value is identical to current value,
             # prevent signals from causing an infinite loop.
             if view.widgets[name].get_value() != value:
@@ -43,8 +43,8 @@ class PropertyChangedCmd(QtWidgets.QUndoCommand):
         # view properties.
         if name in view.properties.keys():
             # remap "pos" to "xy_pos" node view has pre-existing pos method.
-            if name == 'pos':
-                name = 'xy_pos'
+            if name == "pos":
+                name = "xy_pos"
             setattr(view, name, value)
 
         # emit property changed signal.
@@ -77,7 +77,7 @@ class NodeVisibleCmd(QtWidgets.QUndoCommand):
 
     def set_node_visible(self, visible):
         model = self.node.model
-        model.set_property('visible', visible)
+        model.set_property("visible", visible)
 
         node_view = self.node.view
         node_view.visible = visible
@@ -94,7 +94,7 @@ class NodeVisibleCmd(QtWidgets.QUndoCommand):
 
         # emit property changed signal.
         graph = self.node.graph
-        graph.property_changed.emit(self.node, 'visible', visible)
+        graph.property_changed.emit(self.node, "visible", visible)
 
     def undo(self):
         self.set_node_visible(not self.visible)
@@ -115,7 +115,7 @@ class NodeWidgetVisibleCmd(QtWidgets.QUndoCommand):
 
     def __init__(self, node, name, visible):
         QtWidgets.QUndoCommand.__init__(self)
-        label = 'show' if visible else 'hide'
+        label = "show" if visible else "hide"
         self.setText('{} node widget "{}"'.format(label, name))
         self.view = node.view
         self.node_widget = self.view.get_widget(name)
@@ -170,7 +170,7 @@ class NodeAddedCmd(QtWidgets.QUndoCommand):
 
     def __init__(self, graph, node, pos=None, emit_signal=True):
         QtWidgets.QUndoCommand.__init__(self)
-        self.setText('added node')
+        self.setText("added node")
         self.graph = graph
         self.node = node
         self.pos = pos
@@ -210,7 +210,7 @@ class NodesRemovedCmd(QtWidgets.QUndoCommand):
 
     def __init__(self, graph, nodes, emit_signal=True):
         QtWidgets.QUndoCommand.__init__(self)
-        self.setText('deleted node(s)')
+        self.setText("deleted node(s)")
         self.graph = graph
         self.nodes = nodes
         self.emit_signal = emit_signal
@@ -328,8 +328,7 @@ class PortConnectedCmd(QtWidgets.QUndoCommand):
         if self.emit_signal:
             ports = {p.type_(): p for p in [self.source, self.target]}
             graph = self.source.node().graph
-            graph.port_disconnected.emit(ports[PortTypeEnum.IN.value],
-                                         ports[PortTypeEnum.OUT.value])
+            graph.port_disconnected.emit(ports[PortTypeEnum.IN.value], ports[PortTypeEnum.OUT.value])
 
     def redo(self):
         src_model = self.source.model
@@ -346,8 +345,7 @@ class PortConnectedCmd(QtWidgets.QUndoCommand):
         if self.emit_signal:
             ports = {p.type_(): p for p in [self.source, self.target]}
             graph = self.source.node().graph
-            graph.port_connected.emit(ports[PortTypeEnum.IN.value],
-                                      ports[PortTypeEnum.OUT.value])
+            graph.port_connected.emit(ports[PortTypeEnum.IN.value], ports[PortTypeEnum.OUT.value])
 
 
 class PortDisconnectedCmd(QtWidgets.QUndoCommand):
@@ -381,8 +379,7 @@ class PortDisconnectedCmd(QtWidgets.QUndoCommand):
         if self.emit_signal:
             ports = {p.type_(): p for p in [self.source, self.target]}
             graph = self.source.node().graph
-            graph.port_connected.emit(ports[PortTypeEnum.IN.value],
-                                      ports[PortTypeEnum.OUT.value])
+            graph.port_connected.emit(ports[PortTypeEnum.IN.value], ports[PortTypeEnum.OUT.value])
 
     def redo(self):
         src_model = self.source.model
@@ -408,8 +405,7 @@ class PortDisconnectedCmd(QtWidgets.QUndoCommand):
         if self.emit_signal:
             ports = {p.type_(): p for p in [self.source, self.target]}
             graph = self.source.node().graph
-            graph.port_disconnected.emit(ports[PortTypeEnum.IN.value],
-                                         ports[PortTypeEnum.OUT.value])
+            graph.port_disconnected.emit(ports[PortTypeEnum.IN.value], ports[PortTypeEnum.OUT.value])
 
 
 class PortLockedCmd(QtWidgets.QUndoCommand):
@@ -469,9 +465,9 @@ class PortVisibleCmd(QtWidgets.QUndoCommand):
         self.port = port
         self.visible = visible
         if visible:
-            self.setText('show port {}'.format(self.port.name()))
+            self.setText("show port {}".format(self.port.name()))
         else:
-            self.setText('hide port {}'.format(self.port.name()))
+            self.setText("hide port {}".format(self.port.name()))
 
     def set_visible(self, visible):
         self.port.model.visible = visible
@@ -495,6 +491,6 @@ class PortVisibleCmd(QtWidgets.QUndoCommand):
 
     def undo(self):
         self.set_visible(not self.visible)
-        
+
     def redo(self):
         self.set_visible(self.visible)

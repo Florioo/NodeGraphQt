@@ -1,14 +1,13 @@
 #!/usr/bin/python
 from collections import defaultdict
 
-from qtpy import QtWidgets, QtCore, QtGui
+from qtpy import QtCore, QtGui, QtWidgets
 
 from .node_property_factory import NodePropertyWidgetFactory
 from .prop_widgets_base import PropLineEdit
 
 
 class _PropertiesDelegate(QtWidgets.QStyledItemDelegate):
-
     def paint(self, painter, option, index):
         """
         Args:
@@ -35,17 +34,18 @@ class _PropertiesDelegate(QtWidgets.QStyledItemDelegate):
             painter.setPen(QtGui.QPen(bdr_clr, 1))
 
         painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
-        painter.drawRect(QtCore.QRect(
-            option.rect.x() + border_width,
-            option.rect.y() + border_width,
-            option.rect.width() - (border_width * 2),
-            option.rect.height() - (border_width * 2))
+        painter.drawRect(
+            QtCore.QRect(
+                option.rect.x() + border_width,
+                option.rect.y() + border_width,
+                option.rect.width() - (border_width * 2),
+                option.rect.height() - (border_width * 2),
+            )
         )
         painter.restore()
 
 
 class _PropertiesList(QtWidgets.QTableWidget):
-
     def __init__(self, parent=None):
         super(_PropertiesList, self).__init__(parent)
         self.setItemDelegate(_PropertiesDelegate())
@@ -68,9 +68,7 @@ class _PropertiesList(QtWidgets.QTableWidget):
             event (QtGui.QWheelEvent):
         """
         delta = event.angleDelta().y() * 0.2
-        self.verticalScrollBar().setValue(
-            self.verticalScrollBar().value() - delta
-        )
+        self.verticalScrollBar().setValue(self.verticalScrollBar().value() - delta)
 
 
 class _PropertiesContainer(QtWidgets.QWidget):
@@ -92,9 +90,7 @@ class _PropertiesContainer(QtWidgets.QWidget):
         self.__property_widgets = {}
 
     def __repr__(self):
-        return '<{} object at {}>'.format(
-            self.__class__.__name__, hex(id(self))
-        )
+        return "<{} object at {}>".format(self.__class__.__name__, hex(id(self)))
 
     def add_widget(self, name, widget, value, label=None, tooltip=None):
         """
@@ -110,8 +106,8 @@ class _PropertiesContainer(QtWidgets.QWidget):
         label = label or name
         label_widget = QtWidgets.QLabel(label)
         if tooltip:
-            widget.setToolTip('{}\n{}'.format(name, tooltip))
-            label_widget.setToolTip('{}\n{}'.format(name, tooltip))
+            widget.setToolTip("{}\n{}".format(name, tooltip))
+            label_widget.setToolTip("{}\n{}".format(name, tooltip))
         else:
             widget.setToolTip(name)
             label_widget.setToolTip(name)
@@ -121,7 +117,7 @@ class _PropertiesContainer(QtWidgets.QWidget):
             row += 1
 
         label_flags = QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignRight
-        if widget.__class__.__name__ == 'PropTextEdit':
+        if widget.__class__.__name__ == "PropTextEdit":
             label_flags = label_flags | QtCore.Qt.AlignmentFlag.AlignTop
 
         self.__layout.addWidget(label_widget, row, 0, label_flags)
@@ -161,19 +157,15 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
         self._node = node
         self._ports = {}
 
-        self.input_group, self.input_tree = self._build_tree_group(
-            'Input Ports'
-        )
-        self.input_group.setToolTip('Display input port connections')
+        self.input_group, self.input_tree = self._build_tree_group("Input Ports")
+        self.input_group.setToolTip("Display input port connections")
         for _, port in node.inputs().items():
             self._build_row(self.input_tree, port)
         for col in range(self.input_tree.columnCount()):
             self.input_tree.resizeColumnToContents(col)
 
-        self.output_group, self.output_tree = self._build_tree_group(
-            'Output Ports'
-        )
-        self.output_group.setToolTip('Display output port connections')
+        self.output_group, self.output_tree = self._build_tree_group("Output Ports")
+        self.output_group.setToolTip("Display output port connections")
         for _, port in node.outputs().items():
             self._build_row(self.output_tree, port)
         for col in range(self.output_tree.columnCount()):
@@ -190,9 +182,7 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
         self.output_tree.setVisible(False)
 
     def __repr__(self):
-        return '<{} object at {}>'.format(
-            self.__class__.__name__, hex(id(self))
-        )
+        return "<{} object at {}>".format(self.__class__.__name__, hex(id(self)))
 
     @staticmethod
     def _build_tree_group(title):
@@ -212,15 +202,13 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
         group_box.setTitle(title)
         group_box.setLayout(QtWidgets.QVBoxLayout())
 
-        headers = ['Locked', 'Name', 'Connections', '']
+        headers = ["Locked", "Name", "Connections", ""]
         tree_widget = QtWidgets.QTreeWidget()
         tree_widget.setColumnCount(len(headers))
         tree_widget.setHeaderLabels(headers)
         tree_widget.setHeaderHidden(False)
         tree_widget.header().setStretchLastSection(False)
-        QtCompat.QHeaderView.setSectionResizeMode(
-            tree_widget.header(), 2, QtWidgets.QHeaderView.ResizeMode.Stretch
-        )
+        QtCompat.QHeaderView.setSectionResizeMode(tree_widget.header(), 2, QtWidgets.QHeaderView.ResizeMode.Stretch)
 
         group_box.layout().addWidget(tree_widget)
 
@@ -237,10 +225,10 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
         item = QtWidgets.QTreeWidgetItem(tree)
         item.setFlags(item.flags() & ~QtCore.Qt.ItemFlag.ItemIsSelectable)
         item.setText(1, port.name())
-        item.setToolTip(0, 'Lock Port')
-        item.setToolTip(1, 'Port Name')
-        item.setToolTip(2, 'Select connected port.')
-        item.setToolTip(3, 'Center on connected port node.')
+        item.setToolTip(0, "Lock Port")
+        item.setToolTip(1, "Port Name")
+        item.setToolTip(2, "Select connected port.")
+        item.setToolTip(3, "Center on connected port node.")
 
         # TODO: will need to update this checkbox lock logic to work with
         #       the undo/redo functionality.
@@ -257,12 +245,8 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
         tree.setItemWidget(item, 2, combo)
 
         focus_btn = QtWidgets.QPushButton()
-        focus_btn.setIcon(QtGui.QIcon(
-            tree.style().standardPixmap(QtWidgets.QStyle.SP_DialogYesButton)
-        ))
-        focus_btn.clicked.connect(
-            lambda: self._on_focus_to_node(self._ports.get(combo.currentText()))
-        )
+        focus_btn.setIcon(QtGui.QIcon(tree.style().standardPixmap(QtWidgets.QStyle.SP_DialogYesButton)))
+        focus_btn.clicked.connect(lambda: self._on_focus_to_node(self._ports.get(combo.currentText())))
         tree.setItemWidget(item, 3, focus_btn)
 
     def _on_focus_to_node(self, port):
@@ -315,33 +299,27 @@ class NodePropEditorWidget(QtWidgets.QWidget):
         self.__tab = QtWidgets.QTabWidget()
 
         close_btn = QtWidgets.QPushButton()
-        close_btn.setIcon(QtGui.QIcon(
-            self.style().standardPixmap(
-                QtWidgets.QStyle.SP_DialogCloseButton
-            )
-        ))
+        close_btn.setIcon(QtGui.QIcon(self.style().standardPixmap(QtWidgets.QStyle.SP_DialogCloseButton)))
         close_btn.setMaximumWidth(40)
-        close_btn.setToolTip('close property')
+        close_btn.setToolTip("close property")
         close_btn.clicked.connect(self._on_close)
 
         self.name_wgt = PropLineEdit()
-        self.name_wgt.set_name('name')
-        self.name_wgt.setToolTip('name\nSet the node name.')
+        self.name_wgt.set_name("name")
+        self.name_wgt.setToolTip("name\nSet the node name.")
         self.name_wgt.set_value(node.name())
         self.name_wgt.value_changed.connect(self._on_property_changed)
 
         self.type_wgt = QtWidgets.QLabel(node.type_)
         self.type_wgt.setAlignment(QtCore.Qt.AlignRight)
-        self.type_wgt.setToolTip(
-            'type_\nNode type identifier followed by the class name.'
-        )
+        self.type_wgt.setToolTip("type_\nNode type identifier followed by the class name.")
         font = self.type_wgt.font()
         font.setPointSize(10)
         self.type_wgt.setFont(font)
 
         name_layout = QtWidgets.QHBoxLayout()
         name_layout.setContentsMargins(0, 0, 0, 0)
-        name_layout.addWidget(QtWidgets.QLabel('name'))
+        name_layout.addWidget(QtWidgets.QLabel("name"))
         name_layout.addWidget(self.name_wgt)
         name_layout.addWidget(close_btn)
         layout = QtWidgets.QVBoxLayout(self)
@@ -353,9 +331,7 @@ class NodePropEditorWidget(QtWidgets.QWidget):
         self._port_connections = self._read_node(node)
 
     def __repr__(self):
-        return '<{} object at {}>'.format(
-            self.__class__.__name__, hex(id(self))
-        )
+        return "<{} object at {}>".format(self.__class__.__name__, hex(id(self)))
 
     def _on_close(self):
         """
@@ -395,11 +371,10 @@ class NodePropEditorWidget(QtWidgets.QWidget):
             tab_mapping[tab_name].append((prop_name, prop_val))
 
         # add tabs.
-        reserved_tabs = ['Node', 'Ports']
+        reserved_tabs = ["Node", "Ports"]
         for tab in sorted(tab_mapping.keys()):
             if tab in reserved_tabs:
-                print('tab name "{}" is reserved by the "NodePropWidget" '
-                      'please use a different tab name.')
+                print('tab name "{}" is reserved by the "NodePropWidget" ' "please use a different tab name.")
                 continue
             self.add_tab(tab)
 
@@ -419,33 +394,29 @@ class NodePropEditorWidget(QtWidgets.QWidget):
 
                 tooltip = None
                 if prop_name in common_props.keys():
-                    if 'items' in common_props[prop_name].keys():
-                        widget.set_items(common_props[prop_name]['items'])
-                    if 'range' in common_props[prop_name].keys():
-                        prop_range = common_props[prop_name]['range']
+                    if "items" in common_props[prop_name].keys():
+                        widget.set_items(common_props[prop_name]["items"])
+                    if "range" in common_props[prop_name].keys():
+                        prop_range = common_props[prop_name]["range"]
                         widget.set_min(prop_range[0])
                         widget.set_max(prop_range[1])
-                    if 'tooltip' in common_props[prop_name].keys():
-                        tooltip = common_props[prop_name]['tooltip']
+                    if "tooltip" in common_props[prop_name].keys():
+                        tooltip = common_props[prop_name]["tooltip"]
                 prop_window.add_widget(
-                    name=prop_name,
-                    widget=widget,
-                    value=value,
-                    label=prop_name.replace('_', ' '),
-                    tooltip=tooltip
+                    name=prop_name, widget=widget, value=value, label=prop_name.replace("_", " "), tooltip=tooltip
                 )
                 widget.value_changed.connect(self._on_property_changed)
 
         # add "Node" tab properties. (default props)
-        self.add_tab('Node')
+        self.add_tab("Node")
         default_props = {
-            'color': 'Node base color.',
-            'text_color': 'Node text color.',
-            'border_color': 'Node border color.',
-            'disabled': 'Disable/Enable node state.',
-            'id': 'Unique identifier string to the node.'
+            "color": "Node base color.",
+            "text_color": "Node text color.",
+            "border_color": "Node border color.",
+            "disabled": "Disable/Enable node state.",
+            "id": "Unique identifier string to the node.",
         }
-        prop_window = self.__tab_windows['Node']
+        prop_window = self.__tab_windows["Node"]
         for prop_name, tooltip in default_props.items():
             wid_type = model.get_widget_type(prop_name)
             widget = widget_factory.get_widget(wid_type)
@@ -454,31 +425,29 @@ class NodePropEditorWidget(QtWidgets.QWidget):
                 name=prop_name,
                 widget=widget,
                 value=model.get_property(prop_name),
-                label=prop_name.replace('_', ' '),
-                tooltip=tooltip
+                label=prop_name.replace("_", " "),
+                tooltip=tooltip,
             )
 
             widget.value_changed.connect(self._on_property_changed)
 
-        self.type_wgt.setText(model.get_property('type_') or '')
+        self.type_wgt.setText(model.get_property("type_") or "")
 
         # add "ports" tab connections.
         ports_container = None
         if node.inputs() or node.outputs():
             ports_container = _PortConnectionsContainer(self, node=node)
-            self.__tab.addTab(ports_container, 'Ports')
+            self.__tab.addTab(ports_container, "Ports")
 
         # hide/remove empty tabs with no property widgets.
-        tab_index = {
-            self.__tab.tabText(x): x for x in range(self.__tab.count())
-        }
+        tab_index = {self.__tab.tabText(x): x for x in range(self.__tab.count())}
         current_idx = None
         for tab_name, prop_window in self.__tab_windows.items():
             prop_widgets = prop_window.get_all_widgets()
             if not prop_widgets:
                 # I prefer to hide the tab but in older version of pyside this
                 # attribute doesn't exist we'll just remove.
-                if hasattr(self.__tab, 'setTabVisible'):
+                if hasattr(self.__tab, "setTabVisible"):
                     self.__tab.setTabVisible(tab_index[tab_name], False)
                 else:
                     self.__tab.removeTab(tab_index[tab_name])
@@ -499,7 +468,7 @@ class NodePropEditorWidget(QtWidgets.QWidget):
         """
         return self.__node_id
 
-    def add_widget(self, name, widget, tab='Properties'):
+    def add_widget(self, name, widget, tab="Properties"):
         """
         add new node property widget.
 
@@ -509,7 +478,7 @@ class NodePropEditorWidget(QtWidgets.QWidget):
             tab (str): tab name.
         """
         if tab not in self._widgets.keys():
-            tab = 'Properties'
+            tab = "Properties"
         window = self.__tab_windows[tab]
         window.add_widget(name, widget)
         widget.value_changed.connect(self._on_property_changed)
@@ -525,7 +494,7 @@ class NodePropEditorWidget(QtWidgets.QWidget):
             PropListWidget: tab child widget.
         """
         if name in self.__tab_windows.keys():
-            raise AssertionError('Tab name {} already taken!'.format(name))
+            raise AssertionError("Tab name {} already taken!".format(name))
         self.__tab_windows[name] = _PropertiesContainer(self)
         self.__tab.addTab(self.__tab_windows[name], name)
         return self.__tab_windows[name]
@@ -549,7 +518,7 @@ class NodePropEditorWidget(QtWidgets.QWidget):
         Returns:
             NodeGraphQt.custom_widgets.properties_bin.prop_widgets_abstract.BaseProperty: property widget.
         """
-        if name == 'name':
+        if name == "name":
             return self.name_wgt
         for prop_win in self.__tab_windows.values():
             widget = prop_win.get_widget(name)
@@ -626,10 +595,10 @@ class PropertiesBinWidget(QtWidgets.QWidget):
 
     def __init__(self, parent=None, node_graph=None):
         super(PropertiesBinWidget, self).__init__(parent)
-        self.setWindowTitle('Properties Bin')
+        self.setWindowTitle("Properties Bin")
         self._prop_list = _PropertiesList()
         self._limit = QtWidgets.QSpinBox()
-        self._limit.setToolTip('Set display nodes limit.')
+        self._limit.setToolTip("Set display nodes limit.")
         self._limit.setMaximum(10)
         self._limit.setMinimum(0)
         self._limit.setValue(2)
@@ -642,13 +611,12 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self._block_signal = False
 
         self._lock = False
-        self._btn_lock = QtWidgets.QPushButton('Lock')
-        self._btn_lock.setToolTip(
-            'Lock the properties bin prevent nodes from being loaded.')
+        self._btn_lock = QtWidgets.QPushButton("Lock")
+        self._btn_lock.setToolTip("Lock the properties bin prevent nodes from being loaded.")
         self._btn_lock.clicked.connect(self.lock_bin)
 
-        btn_clr = QtWidgets.QPushButton('Clear')
-        btn_clr.setToolTip('Clear the properties bin.')
+        btn_clr = QtWidgets.QPushButton("Clear")
+        btn_clr.setToolTip("Clear the properties bin.")
         btn_clr.clicked.connect(self.clear_bin)
 
         top_layout = QtWidgets.QHBoxLayout()
@@ -669,9 +637,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         node_graph.property_changed.connect(self.__on_graph_property_changed)
 
     def __repr__(self):
-        return '<{} object at {}>'.format(
-            self.__class__.__name__, hex(id(self))
-        )
+        return "<{} object at {}>".format(self.__class__.__name__, hex(id(self)))
 
     def __on_port_tree_visible_changed(self, node_id, visible, tree_widget):
         """
@@ -689,8 +655,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             widget = self._prop_list.cellWidget(items[0].row(), 0)
             widget.adjustSize()
             QtCompat.QHeaderView.setSectionResizeMode(
-                self._prop_list.verticalHeader(),
-                QtWidgets.QHeaderView.ResizeToContents
+                self._prop_list.verticalHeader(), QtWidgets.QHeaderView.ResizeToContents
             )
 
     def __on_prop_close(self, node_id):
@@ -814,14 +779,10 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         port_connections = prop_widget.get_port_connection_widget()
         if port_connections:
             port_connections.input_group.clicked.connect(
-                lambda v: self.__on_port_tree_visible_changed(
-                    prop_widget.node_id(), v, port_connections.input_tree
-                )
+                lambda v: self.__on_port_tree_visible_changed(prop_widget.node_id(), v, port_connections.input_tree)
             )
             port_connections.output_group.clicked.connect(
-                lambda v: self.__on_port_tree_visible_changed(
-                    prop_widget.node_id(), v, port_connections.output_tree
-                )
+                lambda v: self.__on_port_tree_visible_changed(prop_widget.node_id(), v, port_connections.output_tree)
             )
 
         self._prop_list.setCellWidget(0, 0, prop_widget)
@@ -846,9 +807,9 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         """
         self._lock = not self._lock
         if self._lock:
-            self._btn_lock.setText('UnLock')
+            self._btn_lock.setText("UnLock")
         else:
-            self._btn_lock.setText('Lock')
+            self._btn_lock.setText("Lock")
 
     def clear_bin(self):
         """

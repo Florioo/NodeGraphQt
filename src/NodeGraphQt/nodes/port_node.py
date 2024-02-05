@@ -20,7 +20,7 @@ class PortInputNode(BaseNode):
     -
     """
 
-    NODE_NAME = 'InputPort'
+    NODE_NAME = "InputPort"
 
     def __init__(self, qgraphics_item=None, parent_port=None):
         super(PortInputNode, self).__init__(qgraphics_item or PortInputNodeItem)
@@ -36,19 +36,18 @@ class PortInputNode(BaseNode):
         """
         return self._parent_port
 
-    def add_input(self, name='input', multi_input=False, display_name=True,
-                  color=None, locked=False, painter_func=None):
+    def add_input(
+        self, name="input", multi_input=False, display_name=True, color=None, locked=False, painter_func=None
+    ):
         """
         Warnings:
             This is not available for the ``PortInputNode`` class.
         """
-        raise PortRegistrationError(
-            '"{}.add_input()" is not available for {}.'
-            .format(self.__class__.__name__, self)
-        )
+        raise PortRegistrationError('"{}.add_input()" is not available for {}.'.format(self.__class__.__name__, self))
 
-    def add_output(self, name='output', multi_output=True, display_name=True,
-                   color=None, locked=False, painter_func=None):
+    def add_output(
+        self, name="output", multi_output=True, display_name=True, color=None, locked=False, painter_func=None
+    ):
         """
         Warnings:
             This function is called by :meth:`NodeGraphQt.SubGraph.expand_group_node`
@@ -56,16 +55,10 @@ class PortInputNode(BaseNode):
         """
         if self._outputs:
             raise PortRegistrationError(
-                '"{}.add_output()" only ONE output is allowed for this node.'
-                .format(self.__class__.__name__, self)
+                '"{}.add_output()" only ONE output is allowed for this node.'.format(self.__class__.__name__, )
             )
         super(PortInputNode, self).add_output(
-            name=name,
-            multi_output=multi_output,
-            display_name=False,
-            color=color,
-            locked=locked,
-            painter_func=None
+            name=name, multi_output=multi_output, display_name=False, color=color, locked=locked, painter_func=None
         )
 
 
@@ -84,12 +77,10 @@ class PortOutputNode(BaseNode):
     -
     """
 
-    NODE_NAME = 'OutputPort'
+    NODE_NAME = "OutputPort"
 
     def __init__(self, qgraphics_item=None, parent_port=None):
-        super(PortOutputNode, self).__init__(
-            qgraphics_item or PortOutputNodeItem
-        )
+        super(PortOutputNode, self).__init__(qgraphics_item or PortOutputNodeItem)
         self._parent_port = parent_port
 
     @property
@@ -102,8 +93,9 @@ class PortOutputNode(BaseNode):
         """
         return self._parent_port
 
-    def add_input(self, name='input', multi_input=False, display_name=True,
-                  color=None, locked=False, painter_func=None):
+    def add_input(
+        self, name="input", multi_input=False, display_name=True, color=None, locked=False, painter_func=None
+    ):
         """
         Warnings:
             This function is called by :meth:`NodeGraphQt.SubGraph.expand_group_node`
@@ -111,25 +103,17 @@ class PortOutputNode(BaseNode):
         """
         if self._inputs:
             raise PortRegistrationError(
-                '"{}.add_input()" only ONE input is allowed for this node.'
-                .format(self.__class__.__name__, self)
+                '"{}.add_input()" only ONE input is allowed for this node.'.format(self.__class__.__name__, )
             )
         super(PortOutputNode, self).add_input(
-            name=name,
-            multi_input=multi_input,
-            display_name=False,
-            color=color,
-            locked=locked,
-            painter_func=None
+            name=name, multi_input=multi_input, display_name=False, color=color, locked=locked, painter_func=None
         )
 
-    def add_output(self, name='output', multi_output=True, display_name=True,
-                   color=None, locked=False, painter_func=None):
+    def add_output(
+        self, name="output", multi_output=True, display_name=True, color=None, locked=False, painter_func=None
+    ):
         """
         Warnings:
             This is not available for the ``PortOutputNode`` class.
         """
-        raise PortRegistrationError(
-            '"{}.add_output()" is not available for {}.'
-            .format(self.__class__.__name__, self)
-        )
+        raise PortRegistrationError('"{}.add_output()" is not available for {}.'.format(self.__class__.__name__, self))

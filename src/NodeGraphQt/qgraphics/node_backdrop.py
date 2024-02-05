@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from qtpy import QtGui, QtCore, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 
 from NodeGraphQt.constants import Z_VAL_BACKDROP, NodeEnum
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
@@ -22,7 +22,7 @@ class BackdropSizer(QtWidgets.QGraphicsItem):
         self.setFlag(self.GraphicsItemFlag.ItemIsMovable, True)
         self.setFlag(self.GraphicsItemFlag.ItemSendsScenePositionChanges, True)
         self.setCursor(QtGui.QCursor(QtCore.Qt.SizeFDiagCursor))
-        self.setToolTip('double-click auto resize')
+        self.setToolTip("double-click auto resize")
         self._size = size
 
     @property
@@ -79,10 +79,9 @@ class BackdropSizer(QtWidgets.QGraphicsItem):
 
         margin = 1.0
         rect = self.boundingRect()
-        rect = QtCore.QRectF(rect.left() + margin,
-                             rect.top() + margin,
-                             rect.width() - (margin * 2),
-                             rect.height() - (margin * 2))
+        rect = QtCore.QRectF(
+            rect.left() + margin, rect.top() + margin, rect.width() - (margin * 2), rect.height() - (margin * 2)
+        )
 
         item = self.parentItem()
         if item and item.selected:
@@ -111,10 +110,10 @@ class BackdropNodeItem(AbstractNodeItem):
         parent (QtWidgets.QGraphicsItem): parent item.
     """
 
-    def __init__(self, name='backdrop', text='', parent=None):
+    def __init__(self, name="backdrop", text="", parent=None):
         super(BackdropNodeItem, self).__init__(name, parent)
         self.setZValue(Z_VAL_BACKDROP)
-        self._properties['backdrop_text'] = text
+        self._properties["backdrop_text"] = text
         self._min_size = 80, 80
         self._sizer = BackdropSizer(self, 26.0)
         self._sizer.set_pos(*self._min_size)
@@ -161,17 +160,12 @@ class BackdropNodeItem(AbstractNodeItem):
         self._height = pos.y() + self._sizer.size
 
     def on_sizer_pos_mouse_release(self):
-        size = {
-            'pos': self.xy_pos,
-            'width': self._width,
-            'height': self._height}
-        self.viewer().node_backdrop_updated.emit(
-            self.id, 'sizer_mouse_release', size)
+        size = {"pos": self.xy_pos, "width": self._width, "height": self._height}
+        self.viewer().node_backdrop_updated.emit(self.id, "sizer_mouse_release", size)
 
     def on_sizer_double_clicked(self):
         size = self.calc_backdrop_size()
-        self.viewer().node_backdrop_updated.emit(
-            self.id, 'sizer_double_clicked', size)
+        self.viewer().node_backdrop_updated.emit(self.id, "sizer_double_clicked", size)
 
     def paint(self, painter, option, widget):
         """
@@ -189,10 +183,9 @@ class BackdropNodeItem(AbstractNodeItem):
 
         margin = 1.0
         rect = self.boundingRect()
-        rect = QtCore.QRectF(rect.left() + margin,
-                             rect.top() + margin,
-                             rect.width() - (margin * 2),
-                             rect.height() - (margin * 2))
+        rect = QtCore.QRectF(
+            rect.left() + margin, rect.top() + margin, rect.width() - (margin * 2), rect.height() - (margin * 2)
+        )
 
         radius = 2.6
         color = (self.color[0], self.color[1], self.color[2], 50)
@@ -205,18 +198,13 @@ class BackdropNodeItem(AbstractNodeItem):
         painter.setPen(QtCore.Qt.NoPen)
         painter.drawRoundedRect(top_rect, radius, radius)
         for pos in [top_rect.left(), top_rect.right() - 5.0]:
-            painter.drawRect(
-                QtCore.QRectF(pos, top_rect.bottom() - 5.0, 5.0, 5.0))
+            painter.drawRect(QtCore.QRectF(pos, top_rect.bottom() - 5.0, 5.0, 5.0))
 
         if self.backdrop_text:
             painter.setPen(QtGui.QColor(*self.text_color))
-            txt_rect = QtCore.QRectF(
-                top_rect.x() + 5.0, top_rect.height() + 3.0,
-                rect.width() - 5.0, rect.height())
+            txt_rect = QtCore.QRectF(top_rect.x() + 5.0, top_rect.height() + 3.0, rect.width() - 5.0, rect.height())
             painter.setPen(QtGui.QColor(*self.text_color))
-            painter.drawText(txt_rect,
-                             QtCore.Qt.AlignLeft | QtCore.Qt.TextWordWrap,
-                             self.backdrop_text)
+            painter.drawText(txt_rect, QtCore.Qt.AlignLeft | QtCore.Qt.TextWordWrap, self.backdrop_text)
 
         if self.selected:
             sel_color = [x for x in NodeEnum.SELECTED_COLOR.value]
@@ -225,8 +213,7 @@ class BackdropNodeItem(AbstractNodeItem):
             painter.setPen(QtCore.Qt.NoPen)
             painter.drawRoundedRect(rect, radius, radius)
 
-        txt_rect = QtCore.QRectF(top_rect.x(), top_rect.y(),
-                                 rect.width(), top_rect.height())
+        txt_rect = QtCore.QRectF(top_rect.x(), top_rect.y(), rect.width(), top_rect.height())
         painter.setPen(QtGui.QColor(*self.text_color))
         painter.drawText(txt_rect, QtCore.Qt.AlignCenter, self.name)
 
@@ -242,8 +229,7 @@ class BackdropNodeItem(AbstractNodeItem):
         painter.restore()
 
     def get_nodes(self, inc_intersects=False):
-        mode = {True: QtCore.Qt.IntersectsItemShape,
-                False: QtCore.Qt.ContainsItemShape}
+        mode = {True: QtCore.Qt.IntersectsItemShape, False: QtCore.Qt.ContainsItemShape}
         nodes = []
         if self.scene():
             polygon = self.mapToScene(self.boundingRect())
@@ -262,18 +248,13 @@ class BackdropNodeItem(AbstractNodeItem):
             nodes_rect = self._combined_rect(nodes)
         else:
             center = self.mapToScene(self.boundingRect().center())
-            nodes_rect = QtCore.QRectF(
-                center.x(), center.y(),
-                self._min_size[0], self._min_size[1]
-            )
+            nodes_rect = QtCore.QRectF(center.x(), center.y(), self._min_size[0], self._min_size[1])
 
         padding = 40
         return {
-            'pos': [
-                nodes_rect.x() - padding, nodes_rect.y() - padding
-            ],
-            'width': nodes_rect.width() + (padding * 2),
-            'height': nodes_rect.height() + (padding * 2)
+            "pos": [nodes_rect.x() - padding, nodes_rect.y() - padding],
+            "width": nodes_rect.width() + (padding * 2),
+            "height": nodes_rect.height() + (padding * 2),
         }
 
     @property
@@ -286,11 +267,11 @@ class BackdropNodeItem(AbstractNodeItem):
 
     @property
     def backdrop_text(self):
-        return self._properties['backdrop_text']
+        return self._properties["backdrop_text"]
 
     @backdrop_text.setter
     def backdrop_text(self, text):
-        self._properties['backdrop_text'] = text
+        self._properties["backdrop_text"] = text
         self.update(self.boundingRect())
 
     @AbstractNodeItem.width.setter
@@ -305,7 +286,7 @@ class BackdropNodeItem(AbstractNodeItem):
 
     def from_dict(self, node_dict):
         super().from_dict(node_dict)
-        custom_props = node_dict.get('custom') or {}
+        custom_props = node_dict.get("custom") or {}
         for prop_name, value in custom_props.items():
-            if prop_name == 'backdrop_text':
+            if prop_name == "backdrop_text":
                 self.backdrop_text = value

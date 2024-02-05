@@ -109,17 +109,11 @@ def check_config(app: Sphinx, config: Config) -> None:
     - ``docsearch_index_name``
     """
     if not config.docsearch_app_id:
-        logger.warning(
-            __("You must provide your Algolia application ID for DocSearch to work.")
-        )
+        logger.warning(__("You must provide your Algolia application ID for DocSearch to work."))
     if not config.docsearch_api_key:
-        logger.warning(
-            __("You must provide your Algolia search API key for DocSearch to work.")
-        )
+        logger.warning(__("You must provide your Algolia search API key for DocSearch to work."))
     if not config.docsearch_index_name:
-        logger.warning(
-            __("You must provide your Algolia index name for DocSearch to work.")
-        )
+        logger.warning(__("You must provide your Algolia index name for DocSearch to work."))
 
 
 @progress_message("DocSearch: add assets")
@@ -135,24 +129,12 @@ def update_global_context(app: Sphinx, doctree: Node, docname: str) -> None:
         app.builder.globalcontext["docsearch"] = True
         app.builder.globalcontext["docsearch_app_id"] = app.config.docsearch_app_id
         app.builder.globalcontext["docsearch_api_key"] = app.config.docsearch_api_key
-        app.builder.globalcontext[
-            "docsearch_index_name"
-        ] = app.config.docsearch_index_name
-        app.builder.globalcontext[
-            "docsearch_container"
-        ] = app.config.docsearch_container
-        app.builder.globalcontext[
-            "docsearch_initial_query"
-        ] = app.config.docsearch_initial_query
-        app.builder.globalcontext[
-            "docsearch_placeholder"
-        ] = app.config.docsearch_placeholder
-        app.builder.globalcontext[
-            "docsearch_search_parameter"
-        ] = app.config.docsearch_search_parameter
-        app.builder.globalcontext[
-            "docsearch_missing_results_url"
-        ] = app.config.docsearch_missing_results_url
+        app.builder.globalcontext["docsearch_index_name"] = app.config.docsearch_index_name
+        app.builder.globalcontext["docsearch_container"] = app.config.docsearch_container
+        app.builder.globalcontext["docsearch_initial_query"] = app.config.docsearch_initial_query
+        app.builder.globalcontext["docsearch_placeholder"] = app.config.docsearch_placeholder
+        app.builder.globalcontext["docsearch_search_parameter"] = app.config.docsearch_search_parameter
+        app.builder.globalcontext["docsearch_missing_results_url"] = app.config.docsearch_missing_results_url
 
 
 def remove_script_files(

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from qtpy import QtWidgets, QtCore
+from qtpy import QtCore, QtWidgets
 
 
 class BaseProperty(QtWidgets.QWidget):
@@ -17,8 +17,7 @@ class BaseProperty(QtWidgets.QWidget):
         self._name = None
 
     def __repr__(self):
-        return '<{}() object at {}>'.format(
-            self.__class__.__name__, hex(id(self)))
+        return "<{}() object at {}>".format(self.__class__.__name__, hex(id(self)))
 
     def get_name(self):
         """

@@ -5,7 +5,6 @@ from NodeGraphQt.constants import NodePropWidgetEnum
 
 
 class _ClassProperty(object):
-
     def __init__(self, f):
         self.f = f
 
@@ -24,7 +23,7 @@ class NodeObject(object):
         qgraphics_item (AbstractNodeItem): QGraphicsItem item used for drawing.
     """
 
-    __identifier__ = 'nodeGraphQt.nodes'
+    __identifier__ = "nodeGraphQt.nodes"
     """
     Unique node identifier domain. eg. ``"io.github.jchanvfx"``
 
@@ -86,9 +85,7 @@ class NodeObject(object):
 
         _NodeItem = qgraphics_item
         if _NodeItem is None:
-            raise RuntimeError(
-                'No qgraphics item specified for the node object!'
-            )
+            raise RuntimeError("No qgraphics item specified for the node object!")
 
         self._view = _NodeItem()
         self._view.type_ = self.type_
@@ -97,8 +94,7 @@ class NodeObject(object):
         self._view.layout_direction = self._model.layout_direction
 
     def __repr__(self):
-        return '<{}("{}") object at {}>'.format(
-            self.__class__.__name__, self.NODE_NAME, hex(id(self)))
+        return '<{}("{}") object at {}>'.format(self.__class__.__name__, self.NODE_NAME, hex(id(self)))
 
     @_ClassProperty
     def type_(cls):
@@ -109,7 +105,7 @@ class NodeObject(object):
         Returns:
             str: node type (``__identifier__.__className__``)
         """
-        return cls.__identifier__ + '.' + cls.__name__
+        return cls.__identifier__ + "." + cls.__name__
 
     @property
     def id(self):
@@ -203,7 +199,7 @@ class NodeObject(object):
         Update the node view from model.
         """
         settings = self.model.to_dict[self.model.id]
-        settings['id'] = self.model.id
+        settings["id"] = self.model.id
         self.view.from_dict(settings)
 
     def serialize(self):
@@ -254,14 +250,14 @@ class NodeObject(object):
         """
         return self.model.name
 
-    def set_name(self, name=''):
+    def set_name(self, name=""):
         """
         Set the name of the node.
 
         Args:
             name (str): name for the node.
         """
-        self.set_property('name', name)
+        self.set_property("name", name)
 
     def color(self):
         """
@@ -282,7 +278,7 @@ class NodeObject(object):
             g (int): green value ``0-255`` range.
             b (int): blue value ``0-255`` range.
         """
-        self.set_property('color', (r, g, b, 255))
+        self.set_property("color", (r, g, b, 255))
 
     def disabled(self):
         """
@@ -300,7 +296,7 @@ class NodeObject(object):
         Args:
             mode(bool): True to disable node.
         """
-        self.set_property('disabled', mode)
+        self.set_property("disabled", mode)
 
     def selected(self):
         """
@@ -319,10 +315,9 @@ class NodeObject(object):
         Args:
             selected (bool): True to select the node.
         """
-        self.set_property('selected', selected)
+        self.set_property("selected", selected)
 
-    def create_property(self, name, value, items=None, range=None,
-                        widget_type=None, widget_tooltip=None, tab=None):
+    def create_property(self, name, value, items=None, range=None, widget_type=None, widget_tooltip=None, tab=None):
         """
         Creates a custom property to the node.
 
@@ -350,9 +345,7 @@ class NodeObject(object):
                 :class:`NodeGraphQt.PropertiesBinWidget`.
         """
         widget_type = widget_type or NodePropWidgetEnum.HIDDEN.value
-        self.model.add_property(
-            name, value, items, range, widget_type, widget_tooltip, tab
-        )
+        self.model.add_property(name, value, items, range, widget_type, widget_tooltip, tab)
 
     def properties(self):
         """
@@ -362,7 +355,7 @@ class NodeObject(object):
             dict: a dictionary of node properties.
         """
         props = self.model.to_dict[self.id].copy()
-        props['id'] = self.id
+        props["id"] = self.id
         return props
 
     def get_property(self, name):
@@ -375,7 +368,7 @@ class NodeObject(object):
         Returns:
             object: property data.
         """
-        if self.graph and name == 'selected':
+        if self.graph and name == "selected":
             self.model.set_property(name, self.view.selected)
 
         return self.model.get_property(name)
@@ -399,16 +392,14 @@ class NodeObject(object):
             return
 
         # prevent nodes from have the same name.
-        if self.graph and name == 'name':
+        if self.graph and name == "name":
             value = self.graph.get_unique_name(value)
             self.NODE_NAME = value
 
         if self.graph:
             undo_cmd = PropertyChangedCmd(self, name, value)
-            if name == 'name':
-                undo_cmd.setText(
-                    'renamed "{}" to "{}"'.format(self.name(), value)
-                )
+            if name == "name":
+                undo_cmd.setText('renamed "{}" to "{}"'.format(self.name(), value))
             if push_undo:
                 undo_stack = self.graph.undo_stack()
                 undo_stack.push(undo_cmd)
@@ -464,7 +455,7 @@ class NodeObject(object):
             x (float or int): node X position.
             y (float or int): node Y position.
         """
-        self.set_property('pos', [float(x), float(y)])
+        self.set_property("pos", [float(x), float(y)])
 
     def x_pos(self):
         """

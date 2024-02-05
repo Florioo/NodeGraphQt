@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from qtpy import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui
 
 from NodeGraphQt.constants import NodeEnum, PortEnum
 from NodeGraphQt.qgraphics.node_base import NodeItem
@@ -14,7 +14,7 @@ class GroupNodeItem(NodeItem):
         parent (QtWidgets.QGraphicsItem): parent item.
     """
 
-    def __init__(self, name='group', parent=None):
+    def __init__(self, name="group", parent=None):
         super(GroupNodeItem, self).__init__(name, parent)
 
     def _paint_horizontal(self, painter, option, widget):
@@ -25,19 +25,14 @@ class GroupNodeItem(NodeItem):
         # base background.
         margin = 6.0
         rect = self.boundingRect()
-        rect = QtCore.QRectF(rect.left() + margin,
-                             rect.top() + margin,
-                             rect.width() - (margin * 2),
-                             rect.height() - (margin * 2))
+        rect = QtCore.QRectF(
+            rect.left() + margin, rect.top() + margin, rect.width() - (margin * 2), rect.height() - (margin * 2)
+        )
 
         # draw the base color
         offset = 3.0
-        rect_1 = QtCore.QRectF(rect.x() + (offset / 2),
-                               rect.y() + offset + 2.0,
-                               rect.width(), rect.height())
-        rect_2 = QtCore.QRectF(rect.x() - offset,
-                               rect.y() - offset,
-                               rect.width(), rect.height())
+        rect_1 = QtCore.QRectF(rect.x() + (offset / 2), rect.y() + offset + 2.0, rect.width(), rect.height())
+        rect_2 = QtCore.QRectF(rect.x() - offset, rect.y() - offset, rect.width(), rect.height())
         poly = QtGui.QPolygonF()
         poly.append(rect_1.topRight())
         poly.append(rect_2.topRight())
@@ -52,9 +47,7 @@ class GroupNodeItem(NodeItem):
         painter.drawRect(rect_2)
 
         if self.selected:
-            border_color = QtGui.QColor(
-                *NodeEnum.SELECTED_BORDER_COLOR.value
-            )
+            border_color = QtGui.QColor(*NodeEnum.SELECTED_BORDER_COLOR.value)
             # light overlay on background when selected.
             painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
             painter.drawRect(rect_2)
@@ -64,10 +57,12 @@ class GroupNodeItem(NodeItem):
         # node name background
         padding = 2.0, 2.0
         text_rect = self._text_item.boundingRect()
-        text_rect = QtCore.QRectF(rect_2.left() + padding[0],
-                                  rect_2.top() + padding[1],
-                                  rect.right() - (padding[0] * 2) - margin,
-                                  text_rect.height() - (padding[1] * 2))
+        text_rect = QtCore.QRectF(
+            rect_2.left() + padding[0],
+            rect_2.top() + padding[1],
+            rect.right() - (padding[0] * 2) - margin,
+            text_rect.height() - (padding[1] * 2),
+        )
         if self.selected:
             painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
         else:
@@ -81,10 +76,18 @@ class GroupNodeItem(NodeItem):
         pen.setCapStyle(QtCore.Qt.RoundCap)
         painter.setBrush(QtCore.Qt.NoBrush)
         painter.setPen(pen)
-        painter.drawLines([rect_1.topRight(), rect_2.topRight(),
-                           rect_1.topRight(), rect_1.bottomRight(),
-                           rect_1.bottomRight(), rect_1.bottomLeft(),
-                           rect_1.bottomLeft(), rect_2.bottomLeft()])
+        painter.drawLines(
+            [
+                rect_1.topRight(),
+                rect_2.topRight(),
+                rect_1.topRight(),
+                rect_1.bottomRight(),
+                rect_1.bottomRight(),
+                rect_1.bottomLeft(),
+                rect_1.bottomLeft(),
+                rect_2.bottomLeft(),
+            ]
+        )
         painter.drawLine(rect_1.bottomRight(), rect_2.bottomRight())
 
         pen = QtGui.QPen(border_color, 0.8)
@@ -103,19 +106,14 @@ class GroupNodeItem(NodeItem):
         # base background.
         margin = 6.0
         rect = self.boundingRect()
-        rect = QtCore.QRectF(rect.left() + margin,
-                             rect.top() + margin,
-                             rect.width() - (margin * 2),
-                             rect.height() - (margin * 2))
+        rect = QtCore.QRectF(
+            rect.left() + margin, rect.top() + margin, rect.width() - (margin * 2), rect.height() - (margin * 2)
+        )
 
         # draw the base color
         offset = 3.0
-        rect_1 = QtCore.QRectF(rect.x() + offset,
-                               rect.y() + (offset / 2),
-                               rect.width(), rect.height())
-        rect_2 = QtCore.QRectF(rect.x() - offset,
-                               rect.y() - offset,
-                               rect.width(), rect.height())
+        rect_1 = QtCore.QRectF(rect.x() + offset, rect.y() + (offset / 2), rect.width(), rect.height())
+        rect_2 = QtCore.QRectF(rect.x() - offset, rect.y() - offset, rect.width(), rect.height())
         poly = QtGui.QPolygonF()
         poly.append(rect_1.topRight())
         poly.append(rect_2.topRight())
@@ -129,9 +127,7 @@ class GroupNodeItem(NodeItem):
         painter.drawRect(rect_2)
 
         if self.selected:
-            border_color = QtGui.QColor(
-                *NodeEnum.SELECTED_BORDER_COLOR.value
-            )
+            border_color = QtGui.QColor(*NodeEnum.SELECTED_BORDER_COLOR.value)
             # light overlay on background when selected.
             painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
             painter.drawRect(rect_2)
@@ -148,8 +144,7 @@ class GroupNodeItem(NodeItem):
 
         painter.setPen(QtCore.Qt.NoPen)
         for y in [rect_2.top() + padding, rect_2.bottom() - height - padding]:
-            top_rect = QtCore.QRectF(rect.x() + padding - offset, y,
-                                     rect.width() - (padding * 2), height)
+            top_rect = QtCore.QRectF(rect.x() + padding - offset, y, rect.width() - (padding * 2), height)
             painter.drawRect(top_rect)
 
         # draw the outlines.
@@ -158,10 +153,18 @@ class GroupNodeItem(NodeItem):
         pen.setCapStyle(QtCore.Qt.RoundCap)
         painter.setBrush(QtCore.Qt.NoBrush)
         painter.setPen(pen)
-        painter.drawLines([rect_1.topRight(), rect_2.topRight(),
-                           rect_1.topRight(), rect_1.bottomRight(),
-                           rect_1.bottomRight(), rect_1.bottomLeft(),
-                           rect_1.bottomLeft(), rect_2.bottomLeft()])
+        painter.drawLines(
+            [
+                rect_1.topRight(),
+                rect_2.topRight(),
+                rect_1.topRight(),
+                rect_1.bottomRight(),
+                rect_1.bottomRight(),
+                rect_1.bottomLeft(),
+                rect_1.bottomLeft(),
+                rect_2.bottomLeft(),
+            ]
+        )
         painter.drawLine(rect_1.bottomRight(), rect_2.bottomRight())
 
         pen = QtGui.QPen(border_color, 0.8)
@@ -171,10 +174,10 @@ class GroupNodeItem(NodeItem):
         painter.drawRect(rect_2)
 
         painter.restore()
-        
+
     def _align_icon_horizontal(self, h_offset, v_offset):
         super(GroupNodeItem, self)._align_icon_horizontal(h_offset, v_offset)
-        
+
     def _align_icon_vertical(self, h_offset, v_offset):
         y = self._height / 2
         y -= self._icon_item.boundingRect().height()
@@ -182,7 +185,7 @@ class GroupNodeItem(NodeItem):
 
     def _align_label_horizontal(self, h_offset, v_offset):
         super(GroupNodeItem, self)._align_label_horizontal(h_offset, v_offset)
-        
+
     def _align_label_vertical(self, h_offset, v_offset):
         y = self._height / 2
         y -= self.text_item.boundingRect().height() / 2

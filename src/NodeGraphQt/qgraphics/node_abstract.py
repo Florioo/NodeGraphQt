@@ -1,12 +1,7 @@
 #!/usr/bin/python
 from qtpy import QtCore, QtWidgets
 
-from NodeGraphQt.constants import (
-    Z_VAL_NODE,
-    ITEM_CACHE_MODE,
-    LayoutDirectionEnum,
-    NodeEnum
-)
+from NodeGraphQt.constants import ITEM_CACHE_MODE, Z_VAL_NODE, LayoutDirectionEnum, NodeEnum
 
 
 class AbstractNodeItem(QtWidgets.QGraphicsItem):
@@ -14,29 +9,28 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
     The base class of all node qgraphics item.
     """
 
-    def __init__(self, name='node', parent=None):
+    def __init__(self, name="node", parent=None):
         super(AbstractNodeItem, self).__init__(parent)
         self.setFlags(self.GraphicsItemFlag.ItemIsSelectable | self.GraphicsItemFlag.ItemIsMovable)
         self.setCacheMode(ITEM_CACHE_MODE)
         self.setZValue(Z_VAL_NODE)
         self._properties = {
-            'id': None,
-            'name': name.strip(),
-            'color': (13, 18, 23, 255),
-            'border_color': (46, 57, 66, 255),
-            'text_color': (255, 255, 255, 180),
-            'type_': 'AbstractBaseNode',
-            'selected': False,
-            'disabled': False,
-            'visible': False,
-            'layout_direction': LayoutDirectionEnum.HORIZONTAL.value,
+            "id": None,
+            "name": name.strip(),
+            "color": (13, 18, 23, 255),
+            "border_color": (46, 57, 66, 255),
+            "text_color": (255, 255, 255, 180),
+            "type_": "AbstractBaseNode",
+            "selected": False,
+            "disabled": False,
+            "visible": False,
+            "layout_direction": LayoutDirectionEnum.HORIZONTAL.value,
         }
         self._width = NodeEnum.WIDTH.value
         self._height = NodeEnum.HEIGHT.value
 
     def __repr__(self):
-        return '{}.{}(\'{}\')'.format(
-            self.__module__, self.__class__.__name__, self.name)
+        return "{}.{}('{}')".format(self.__module__, self.__class__.__name__, self.name)
 
     def boundingRect(self):
         return QtCore.QRectF(0.0, 0.0, self._width, self._height)
@@ -48,11 +42,11 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         Args:
             event (QtWidgets.QGraphicsSceneMouseEvent): mouse event.
         """
-        self._properties['selected'] = True
+        self._properties["selected"] = True
         super(AbstractNodeItem, self).mousePressEvent(event)
 
     def setSelected(self, selected):
-        self._properties['selected'] = selected
+        self._properties["selected"] = selected
         super(AbstractNodeItem, self).setSelected(selected)
 
     def draw_node(self):
@@ -86,27 +80,27 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
 
     @property
     def id(self):
-        return self._properties['id']
+        return self._properties["id"]
 
     @id.setter
-    def id(self, unique_id=''):
-        self._properties['id'] = unique_id
+    def id(self, unique_id=""):
+        self._properties["id"] = unique_id
 
     @property
     def type_(self):
-        return self._properties['type_']
+        return self._properties["type_"]
 
     @type_.setter
-    def type_(self, node_type='NODE'):
-        self._properties['type_'] = node_type
+    def type_(self, node_type="NODE"):
+        self._properties["type_"] = node_type
 
     @property
     def layout_direction(self):
-        return self._properties['layout_direction']
+        return self._properties["layout_direction"]
 
     @layout_direction.setter
     def layout_direction(self, value=0):
-        self._properties['layout_direction'] = value
+        self._properties["layout_direction"] = value
 
     @property
     def size(self):
@@ -130,41 +124,41 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
 
     @property
     def color(self):
-        return self._properties['color']
+        return self._properties["color"]
 
     @color.setter
     def color(self, color=(0, 0, 0, 255)):
-        self._properties['color'] = color
+        self._properties["color"] = color
 
     @property
     def text_color(self):
-        return self._properties['text_color']
+        return self._properties["text_color"]
 
     @text_color.setter
     def text_color(self, color=(100, 100, 100, 255)):
-        self._properties['text_color'] = color
+        self._properties["text_color"] = color
 
     @property
     def border_color(self):
-        return self._properties['border_color']
+        return self._properties["border_color"]
 
     @border_color.setter
     def border_color(self, color=(0, 0, 0, 255)):
-        self._properties['border_color'] = color
+        self._properties["border_color"] = color
 
     @property
     def disabled(self):
-        return self._properties['disabled']
+        return self._properties["disabled"]
 
     @disabled.setter
     def disabled(self, state=False):
-        self._properties['disabled'] = state
+        self._properties["disabled"] = state
 
     @property
     def selected(self):
-        if self._properties['selected'] != self.isSelected():
-            self._properties['selected'] = self.isSelected()
-        return self._properties['selected']
+        if self._properties["selected"] != self.isSelected():
+            self._properties["selected"] = self.isSelected()
+        return self._properties["selected"]
 
     @selected.setter
     def selected(self, selected=False):
@@ -172,11 +166,11 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
 
     @property
     def visible(self):
-        return self._properties['visible']
+        return self._properties["visible"]
 
     @visible.setter
     def visible(self, visible=False):
-        self._properties['visible'] = visible
+        self._properties["visible"] = visible
         self.setVisible(visible)
 
     @property
@@ -206,12 +200,12 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
 
     @property
     def name(self):
-        return self._properties['name']
+        return self._properties["name"]
 
     @name.setter
-    def name(self, name=''):
-        self._properties['name'] = name
-        self.setToolTip('node: {}'.format(name))
+    def name(self, name=""):
+        self._properties["name"] = name
+        self.setToolTip("node: {}".format(name))
 
     @property
     def properties(self):
@@ -221,9 +215,7 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         Returns:
             dict: {property_name: property_value}
         """
-        props = {'width': self.width,
-                 'height': self.height,
-                 'pos':  self.xy_pos}
+        props = {"width": self.width, "height": self.height, "pos": self.xy_pos}
         props.update(self._properties)
         return props
 
@@ -251,11 +243,11 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         Args:
             node_dict (dict): serialized node dict.
         """
-        node_attrs = list(self._properties.keys()) + ['width', 'height', 'pos']
+        node_attrs = list(self._properties.keys()) + ["width", "height", "pos"]
         for name, value in node_dict.items():
             if name in node_attrs:
                 # "node.pos" conflicted with "QGraphicsItem.pos()"
                 # so it's refactored to "xy_pos".
-                if name == 'pos':
-                    name = 'xy_pos'
+                if name == "pos":
+                    name = "xy_pos"
                 setattr(self, name, value)

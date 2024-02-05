@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from qtpy import QtWidgets, QtCore
+from qtpy import QtCore, QtWidgets
 
 
 class PropLabel(QtWidgets.QLabel):
@@ -14,8 +14,7 @@ class PropLabel(QtWidgets.QLabel):
         self._name = None
 
     def __repr__(self):
-        return '<{}() object at {}>'.format(
-            self.__class__.__name__, hex(id(self)))
+        return "<{}() object at {}>".format(self.__class__.__name__, hex(id(self)))
 
     def get_name(self):
         return self._name
@@ -46,8 +45,7 @@ class PropLineEdit(QtWidgets.QLineEdit):
         self.editingFinished.connect(self._on_editing_finished)
 
     def __repr__(self):
-        return '<{}() object at {}>'.format(
-            self.__class__.__name__, hex(id(self)))
+        return "<{}() object at {}>".format(self.__class__.__name__, hex(id(self)))
 
     def _on_editing_finished(self):
         self.value_changed.emit(self.get_name(), self.text())
@@ -79,11 +77,10 @@ class PropTextEdit(QtWidgets.QTextEdit):
     def __init__(self, parent=None):
         super(PropTextEdit, self).__init__(parent)
         self._name = None
-        self._prev_text = ''
+        self._prev_text = ""
 
     def __repr__(self):
-        return '<{}() object at {}>'.format(
-            self.__class__.__name__, hex(id(self)))
+        return "<{}() object at {}>".format(self.__class__.__name__, hex(id(self)))
 
     def focusInEvent(self, event):
         super(PropTextEdit, self).focusInEvent(event)
@@ -93,7 +90,7 @@ class PropTextEdit(QtWidgets.QTextEdit):
         super(PropTextEdit, self).focusOutEvent(event)
         if self._prev_text != self.toPlainText():
             self.value_changed.emit(self.get_name(), self.toPlainText())
-        self._prev_text = ''
+        self._prev_text = ""
 
     def get_name(self):
         return self._name
@@ -125,8 +122,7 @@ class PropComboBox(QtWidgets.QComboBox):
         self.currentIndexChanged.connect(self._on_index_changed)
 
     def __repr__(self):
-        return '<{}() object at {}>'.format(
-            self.__class__.__name__, hex(id(self)))
+        return "<{}() object at {}>".format(self.__class__.__name__, hex(id(self)))
 
     def _on_index_changed(self):
         self.value_changed.emit(self.get_name(), self.get_value())
@@ -181,8 +177,7 @@ class PropCheckBox(QtWidgets.QCheckBox):
         self.clicked.connect(self._on_clicked)
 
     def __repr__(self):
-        return '<{}() object at {}>'.format(
-            self.__class__.__name__, hex(id(self)))
+        return "<{}() object at {}>".format(self.__class__.__name__, hex(id(self)))
 
     def _on_clicked(self):
         self.value_changed.emit(self.get_name(), self.get_value())
@@ -217,8 +212,7 @@ class PropSpinBox(QtWidgets.QSpinBox):
         self.valueChanged.connect(self._on_value_change)
 
     def __repr__(self):
-        return '<{}() object at {}>'.format(
-            self.__class__.__name__, hex(id(self)))
+        return "<{}() object at {}>".format(self.__class__.__name__, hex(id(self)))
 
     def _on_value_change(self, value):
         self.value_changed.emit(self.get_name(), value)
@@ -252,8 +246,7 @@ class PropDoubleSpinBox(QtWidgets.QDoubleSpinBox):
         self.valueChanged.connect(self._on_value_change)
 
     def __repr__(self):
-        return '<{}() object at {}>'.format(
-            self.__class__.__name__, hex(id(self)))
+        return "<{}() object at {}>".format(self.__class__.__name__, hex(id(self)))
 
     def _on_value_change(self, value):
         self.value_changed.emit(self.get_name(), value)

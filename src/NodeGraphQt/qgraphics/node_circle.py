@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from qtpy import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui
 
 from NodeGraphQt.constants import NodeEnum, PortEnum
 from NodeGraphQt.qgraphics.node_base import NodeItem
@@ -14,7 +14,7 @@ class CircleNodeItem(NodeItem):
         parent (QtWidgets.QGraphicsItem): parent item.
     """
 
-    def __init__(self, name='circle', parent=None):
+    def __init__(self, name="circle", parent=None):
         super(CircleNodeItem, self).__init__(name, parent)
 
     def _align_ports_horizontal(self, v_offset):
@@ -143,12 +143,12 @@ class CircleNodeItem(NodeItem):
                     if idx == 0:
                         if is_odd:
                             port_x -= (port_width / 2) + delta
-                            port_y += (port_height / 2)
+                            port_y += port_height / 2
                         else:
                             port_x -= delta
                     port.setPos(port_x, port_y)
                     port_x -= (port_width / 2) + delta
-                    port_y += (port_height / 2)
+                    port_y += port_height / 2
 
                 # right half
                 port_x = node_center_x - (port_width / 2)
@@ -159,7 +159,7 @@ class CircleNodeItem(NodeItem):
                             port_x += delta
                     port.setPos(port_x, port_y)
                     port_x += (port_width / 2) + delta
-                    port_y += (port_height / 2)
+                    port_y += port_height / 2
 
         # adjust output position
         outputs = [p for p in self.outputs if p.isVisible()]
@@ -181,12 +181,12 @@ class CircleNodeItem(NodeItem):
                     if idx == 0:
                         if is_odd:
                             port_x -= (port_width / 2) + delta
-                            port_y -= (port_height / 2)
+                            port_y -= port_height / 2
                         else:
                             port_x -= delta
                     port.setPos(port_x, port_y)
                     port_x -= (port_width / 2) + delta
-                    port_y -= (port_height / 2)
+                    port_y -= port_height / 2
 
                 # right half
                 port_x = node_center_x - (port_width / 2)
@@ -197,7 +197,7 @@ class CircleNodeItem(NodeItem):
                             port_x += delta
                     port.setPos(port_x, port_y)
                     port_x += (port_width / 2) + delta
-                    port_y -= (port_height / 2)
+                    port_y -= port_height / 2
 
     def _paint_horizontal(self, painter, option, widget):
         painter.save()
@@ -219,7 +219,7 @@ class CircleNodeItem(NodeItem):
             self.boundingRect().center().x() - (text_width / 2),
             self.boundingRect().center().y() - (text_rect.height() / 2),
             text_rect.width(),
-            text_rect.height()
+            text_rect.height(),
         )
 
         padding = 10.0
@@ -227,7 +227,7 @@ class CircleNodeItem(NodeItem):
             text_rect.center().x() - (text_rect.width() / 2) - (padding / 2),
             text_rect.center().y() - (text_rect.width() / 2) - (padding / 2),
             text_rect.width() + padding,
-            text_rect.width() + padding
+            text_rect.width() + padding,
         )
 
         # draw port lines.
@@ -246,7 +246,7 @@ class CircleNodeItem(NodeItem):
                     pt_width = p.boundingRect().width() / 4
                 pt1 = QtCore.QPointF(
                     p.pos().x() + (p.boundingRect().width() / 2) + pt_width,
-                    p.pos().y() + (p.boundingRect().height() / 2)
+                    p.pos().y() + (p.boundingRect().height() / 2),
                 )
                 path = QtGui.QPainterPath()
                 path.moveTo(pt1)
@@ -263,7 +263,7 @@ class CircleNodeItem(NodeItem):
                     pt_width = p.boundingRect().width() / 4
                 pt1 = QtCore.QPointF(
                     p.pos().x() + (p.boundingRect().width() / 2) - pt_width,
-                    p.pos().y() + (p.boundingRect().height() / 2)
+                    p.pos().y() + (p.boundingRect().height() / 2),
                 )
                 path = QtGui.QPainterPath()
                 path.moveTo(pt1)
@@ -283,9 +283,7 @@ class CircleNodeItem(NodeItem):
             painter.drawEllipse(rect)
 
             border_width = 1.2
-            border_color = QtGui.QColor(
-                *NodeEnum.SELECTED_BORDER_COLOR.value
-            )
+            border_color = QtGui.QColor(*NodeEnum.SELECTED_BORDER_COLOR.value)
         else:
             border_width = 0.8
             border_color = QtGui.QColor(*self.border_color)
@@ -301,7 +299,7 @@ class CircleNodeItem(NodeItem):
             rect.center().x() - (text_rect.width() / 2),
             rect.center().y() - (text_rect.height() / 2),
             text_rect.width(),
-            text_rect.height()
+            text_rect.height(),
         )
         if self.selected:
             painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
@@ -325,11 +323,7 @@ class CircleNodeItem(NodeItem):
 
         rect = self.boundingRect()
         width = min(rect.width(), rect.height()) / 1.8
-        rect = QtCore.QRectF(
-            rect.center().x() - (width / 2),
-            rect.center().y() - (width / 2),
-            width, width
-        )
+        rect = QtCore.QRectF(rect.center().x() - (width / 2), rect.center().y() - (width / 2), width, width)
 
         # draw port lines.
         pen_color = QtGui.QColor(*self.border_color)
@@ -341,8 +335,7 @@ class CircleNodeItem(NodeItem):
         for p in self.inputs:
             if p.isVisible():
                 pt1 = QtCore.QPointF(
-                    p.pos().x() + (p.boundingRect().width() / 2),
-                    p.pos().y() + (p.boundingRect().height() / 2)
+                    p.pos().x() + (p.boundingRect().width() / 2), p.pos().y() + (p.boundingRect().height() / 2)
                 )
                 path = QtGui.QPainterPath()
                 path.moveTo(pt1)
@@ -353,8 +346,7 @@ class CircleNodeItem(NodeItem):
         for p in self.outputs:
             if p.isVisible():
                 pt1 = QtCore.QPointF(
-                    p.pos().x() + (p.boundingRect().width() / 2),
-                    p.pos().y() + (p.boundingRect().height() / 2)
+                    p.pos().x() + (p.boundingRect().width() / 2), p.pos().y() + (p.boundingRect().height() / 2)
                 )
                 path = QtGui.QPainterPath()
                 path.moveTo(pt1)
@@ -374,9 +366,7 @@ class CircleNodeItem(NodeItem):
             painter.drawEllipse(rect)
 
             border_width = 1.2
-            border_color = QtGui.QColor(
-                *NodeEnum.SELECTED_BORDER_COLOR.value
-            )
+            border_color = QtGui.QColor(*NodeEnum.SELECTED_BORDER_COLOR.value)
         else:
             border_width = 0.8
             border_color = QtGui.QColor(*self.border_color)
@@ -387,7 +377,7 @@ class CircleNodeItem(NodeItem):
         painter.drawEllipse(rect)
 
         painter.restore()
-        
+
     def _align_icon_horizontal(self, h_offset, v_offset):
         icon_rect = self._icon_item.boundingRect()
         x = self.boundingRect().center().x() - (icon_rect.width() / 2)
@@ -412,13 +402,13 @@ class CircleNodeItem(NodeItem):
             widget_rect = widget.boundingRect()
             if not inputs:
                 x = rect.left() + 10
-                widget.widget().setTitleAlign('left')
+                widget.widget().setTitleAlign("left")
             elif not outputs:
                 x = rect.right() - widget_rect.width() - 10
-                widget.widget().setTitleAlign('right')
+                widget.widget().setTitleAlign("right")
             else:
                 x = rect.center().x() - (widget_rect.width() / 2)
-                widget.widget().setTitleAlign('center')
+                widget.widget().setTitleAlign("center")
             widget.setPos(x, y)
             y += widget_rect.height()
 
@@ -436,7 +426,7 @@ class CircleNodeItem(NodeItem):
         for widget in self._widgets.values():
             widget_rect = widget.boundingRect()
             x = rect.center().x() - (widget_rect.width() / 2)
-            widget.widget().setTitleAlign('center')
+            widget.widget().setTitleAlign("center")
             widget.setPos(x, y)
             y += widget_rect.height()
 

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from qtpy import QtWidgets, QtCore
+from qtpy import QtCore, QtWidgets
 
 from .prop_widgets_abstract import BaseProperty
 
@@ -23,8 +23,7 @@ class PropSlider(BaseProperty):
     def _init(self):
         self._slider.setOrientation(QtCore.Qt.Horizontal)
         self._slider.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self._slider.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
-                                   QtWidgets.QSizePolicy.Preferred)
+        self._slider.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         self._spinbox.setButtonSymbols(QtWidgets.QAbstractSpinBox.NoButtons)
         layout = QtWidgets.QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -87,7 +86,7 @@ class QDoubleSlider(QtWidgets.QSlider):
 
     def __init__(self, decimals=2, *args, **kargs):
         super(QDoubleSlider, self).__init__(*args, **kargs)
-        self._multiplier = 10 ** decimals
+        self._multiplier = 10**decimals
 
         self.valueChanged.connect(self._on_value_change)
 

@@ -116,10 +116,7 @@ def deprecated_options(app: Sphinx) -> None:
     """
     theme_options = logos.get_theme_options(app)
 
-    if (
-        "nav_include_hidden" in theme_options
-        and theme_options["nav_include_hidden"] is not None
-    ):
+    if "nav_include_hidden" in theme_options and theme_options["nav_include_hidden"] is not None:
         logger.warning(
             "Setting `nav_include_hidden` in `html_theme_options` is deprecated. "
             "Use `globaltoc_includehidden` in `html_theme_options` instead."
@@ -136,10 +133,7 @@ def deprecated_options(app: Sphinx) -> None:
             app.builder.config.html_sidebars = {"**": []}  # type: ignore[attr-defined]
         del theme_options["show_nav"]
 
-    if (
-        "extra_header_links" in theme_options
-        and theme_options["extra_header_links"] is not None
-    ):
+    if "extra_header_links" in theme_options and theme_options["extra_header_links"] is not None:
         logger.warning(
             "`extra_header_links` is deprecated. "
             "Use `main_nav_links` for text links (left side) and `extra_header_link_icons` for icon links (right side) instead."
@@ -148,15 +142,11 @@ def deprecated_options(app: Sphinx) -> None:
         extra_links = theme_options["extra_header_links"]
         print("EXTRA: ", extra_links)
         # Either we have `extra_header_links = { "label": "url" }
-        main_nav_links = {
-            key: value for key, value in extra_links.items() if isinstance(value, str)
-        }
+        main_nav_links = {key: value for key, value in extra_links.items() if isinstance(value, str)}
         theme_options["main_nav_links"] = main_nav_links
 
         # Or we have `extra_header_links` = { "label": { "link": "link", "icon": "icon" }}
-        extra_link_icons = {
-            key: value for key, value in extra_links.items() if isinstance(value, dict)
-        }
+        extra_link_icons = {key: value for key, value in extra_links.items() if isinstance(value, dict)}
         theme_options["extra_header_link_icons"] = extra_link_icons
 
         del theme_options["extra_header_links"]
