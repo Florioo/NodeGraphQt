@@ -34,6 +34,26 @@ from NodeGraphQt.widgets.node_graph import NodeGraphWidget, SubGraphWidget
 from NodeGraphQt.widgets.viewer import NodeViewer
 from NodeGraphQt.widgets.viewer_nav import NodeNavigationWidget
 
+from typing import Callable, List
+from dataclasses import dataclass
+
+@dataclass
+class command_definition:
+    label: str
+    file: Callable[["NodeGraph"], None]
+    shortcut: QtGui.QKeySequence.StandardKey | None | str
+
+
+@dataclass
+class separator_definition:
+    pass
+
+
+@dataclass
+class menu_definition:
+    label: str
+    items: list["command_definition | separator_definition | menu_definition"]
+
 
 class NodeGraph(QtCore.QObject):
     """
@@ -829,6 +849,7 @@ class NodeGraph(QtCore.QObject):
                 sub_menu = menu.add_menu(menu_data['label'])
                 items = menu_data.get('items', [])
                 self._deserialize_context_menu(sub_menu, items)
+
         elif isinstance(menu_data, list):
             for item_data in menu_data:
                 self._deserialize_context_menu(menu, item_data)
@@ -899,6 +920,38 @@ class NodeGraph(QtCore.QObject):
         context_menu = self.get_context_menu(menu)
         self._deserialize_context_menu(context_menu, data)
 
+    def set_context_menu_from_model(self, model:list[menu_definition | separator_definition], menu=None):
+        menu = menu or 'graph'
+        context_menu = self.get_context_menu(menu)
+        self._deserialize_model_based_context_menu(context_menu, model)
+
+    def _deserialize_model_based_context_menu(self, menu:NodeGraphMenu, menu_data: list[menu_definition | separator_definition | command_definition]|menu_definition | separator_definition | command_definition):
+        """
+        Populate context menu from a dictionary.
+
+        Args:
+            menu (NodeGraphQt.NodeGraphMenu or NodeGraphQt.NodesMenu):
+                parent context menu.
+            menu_data (list[dict] or dict): serialized menu data.
+        """
+
+        if isinstance(menu_data, menu_definition):
+            sub_menu = menu.add_menu(menu_data.label)
+            self._deserialize_model_based_context_menu(sub_menu, menu_data.items)
+
+        elif isinstance(menu_data, separator_definition):
+            menu.add_separator()
+        
+        elif isinstance(menu_data, command_definition):
+            cmd_kwargs = {'func': menu_data.file,
+                           'shortcut': menu_data.shortcut}
+
+            menu.add_command(name=menu_data.label, **cmd_kwargs)
+
+        elif isinstance(menu_data, List):
+            for item_data in menu_data:
+                self._deserialize_model_based_context_menu(menu, item_data)
+            
     def disable_context_menu(self, disabled=True, name='all'):
         """
         Disable/Enable context menus from the node graph.
